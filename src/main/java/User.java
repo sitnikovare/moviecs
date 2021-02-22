@@ -9,8 +9,7 @@ public class User extends Person {
     public void likes(Movie movie) {
         try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
-            String mTitle = movie.getTitle();
-            connector.CreatePMRelation( this.name, mTitle, "likes" );
+            connector.CreateRelation( this, movie, "likes" );
         }
         catch (Exception ex) {
             System.out.println(ex);
@@ -21,8 +20,7 @@ public class User extends Person {
     public void likes(Person person) {
         try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
-            String pName = person.getName();
-            connector.CreatePPRelation( this.name, pName, "likes" );
+            connector.CreateRelation( this, person, "likes" );
         }
         catch (Exception ex) {
             System.out.println(ex);
@@ -33,8 +31,7 @@ public class User extends Person {
     public void likes(Genre genre) {
         try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
-            String gTitle = genre.getTitle();
-            connector.CreatePGRelation( this.name, gTitle, "likes" );
+            connector.CreateRelation( this, genre, "likes" );
         }
         catch (Exception ex) {
             System.out.println(ex);

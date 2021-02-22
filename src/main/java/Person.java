@@ -12,12 +12,13 @@ public class Person {
     public String getName() {
         return name;
     }
+    public String getRole() { return role; }
 
     //Создание узла Person в базе
-    public void createNodeInDB() {
+    public void initInDB() {
         try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
-            connector.CreatePersonNode( this.name, this.role );
+            connector.CreateNode( this);
         }
         catch (Exception ex) {
             System.out.println(ex);

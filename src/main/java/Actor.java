@@ -10,7 +10,7 @@ public class Actor extends Person{
         try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
             String mTitle = movie.getTitle();
-            connector.CreatePMRelation( this.name,  mTitle, "playsIn");
+            connector.CreateRelation( this,  movie, "playsIn");
         }
         catch (Exception ex) {
             System.out.println(ex);

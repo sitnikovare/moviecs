@@ -45,17 +45,64 @@ public class Connector implements AutoCloseable {
         }
     }
 
-    //Создание узла Person в БД
-    public void CreatePersonNode(final String name, final String role) {
+    //Создание узла от класса Person в БД
+    public void CreateNode(Person person) {
         try ( Session session = driver.session() ) {
             String createPNode = session.writeTransaction( new TransactionWork<String>() {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    Result result = tx.run( "CREATE (a:Person " +
-                                    "{name: $name, role: $role} ) " +
+                    String role = person.getRole();
+                    String name = person.getName();
+
+                    Result result = tx.run( "CREATE (a:" + role +
+                                    "{name: $name} ) " +
                                     "RETURN a.name + ', from node ' + id(a)",
-                            parameters( "name", name, "role", role ) );
+                            parameters( "name", name) );
+                    return result.single().get( 0 ).asString();
+                }
+            } );
+            System.out.println( createPNode );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    //Создание узла Movie в БД
+    public void CreateNode(Movie movie) {
+        try ( Session session = driver.session() ) {
+            String createPNode = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    String mtitle = movie.getTitle();
+
+                    Result result = tx.run( "CREATE (a:Movie {title: $mtitle} ) " +
+                                    "RETURN a.title + ', from node ' + id(a)",
+                            parameters( "mtitle", mtitle) );
+                    return result.single().get( 0 ).asString();
+                }
+            } );
+            System.out.println( createPNode );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    //Создание узла Genre в БД
+    public void CreateNode(Genre genre) {
+        try ( Session session = driver.session() ) {
+            String createPNode = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    String gtitle = genre.getTitle();
+
+                    Result result = tx.run( "CREATE (a:Genre {title: $gtitle} ) " +
+                                    "RETURN a.title + ', from node ' + id(a)",
+                            parameters( "gtitle", gtitle) );
                     return result.single().get( 0 ).asString();
                 }
             } );
@@ -67,18 +114,22 @@ public class Connector implements AutoCloseable {
     }
 
     //Создание связи Person->Movie в БД
-    public void CreatePMRelation( final String nameNode1, final String nameNode2, final String relation) {
+    public void CreateRelation( Person person, Movie movie, final String relation) {
         try ( Session session = driver.session() ) {
             String createPM = session.writeTransaction( new TransactionWork<String>() {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    Result result = tx.run( "MATCH (a:Person), (b:Movie) " +
-                                    "WHERE a.name = $nameNode1 " +
-                                    "AND b.title = $nameNode2 " +
+                    String prole = person.getRole();
+                    String pname = person.getName();
+                    String mtitle = movie.getTitle();
+
+                    Result result = tx.run( "MATCH (a:" + prole +"), (b:Movie) " +
+                                    "WHERE a.name = $pname " +
+                                    "AND b.title = $mtitle " +
                                     "CREATE (a)-[r:" + relation + "]->(b) " +
                                     "RETURN type(r)",
-                            parameters( "nameNode1", nameNode1, "nameNode2", nameNode2,
+                            parameters( "pname", pname, "mtitle", mtitle,
                                     "relation", relation ) );
                     return result.single().get( 0 ).asString();
                 }
@@ -91,18 +142,22 @@ public class Connector implements AutoCloseable {
     }
 
     //Создание связи Movie->Person в БД
-    public void CreateMPRelation( final String nameNode1, final String nameNode2, final String relation) {
+    public void CreateRelation( Movie movie, Person person, final String relation) {
         try ( Session session = driver.session() ) {
             String createMP = session.writeTransaction( new TransactionWork<String>() {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    Result result = tx.run( "MATCH (a:Movie), (b:Person) " +
-                                    "WHERE a.title = $nameNode1 " +
-                                    "AND b.name = $nameNode2 " +
+                    String prole = person.getRole();
+                    String pname = person.getName();
+                    String mtitle = movie.getTitle();
+
+                    Result result = tx.run( "MATCH (a:Movie), (b:" + prole + ") " +
+                                    "WHERE a.title = $mtitle " +
+                                    "AND b.name = $pname " +
                                     "CREATE (a)-[r:" + relation + "]->(b) " +
                                     "RETURN type(r)",
-                            parameters( "nameNode1", nameNode1, "nameNode2", nameNode2,
+                            parameters( "mtitle", mtitle, "pname", pname,
                                     "relation", relation ) );
                     return result.single().get( 0 ).asString();
                 }
@@ -115,18 +170,23 @@ public class Connector implements AutoCloseable {
     }
 
     //Создание связи Person->Person в БД
-    public void CreatePPRelation( final String nameNode1, final String nameNode2, final String relation) {
+    public void CreateRelation( Person per1, Person per2, final String relation) {
         try ( Session session = driver.session() ) {
             String createPP = session.writeTransaction( new TransactionWork<String>() {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    Result result = tx.run( "MATCH (a:Person), (b:Person) " +
-                                    "WHERE a.name = $nameNode1 " +
-                                    "AND b.name = $nameNode2 " +
+                    String p1name = per1.getName();
+                    String p2name = per2.getName();
+                    String p1role = per1.getRole();
+                    String p2role = per2.getRole();
+
+                    Result result = tx.run( "MATCH (a:" + p1role + "), (b:" + p2role + ") " +
+                                    "WHERE a.name = $p1name " +
+                                    "AND b.name = $p2name " +
                                     "CREATE (a)-[r:" + relation + "]->(b) " +
                                     "RETURN type(r)",
-                            parameters( "nameNode1", nameNode1, "nameNode2", nameNode2,
+                            parameters( "p1name", p1name, "p2name", p2name,
                                     "relation", relation ) );
                     return result.single().get( 0 ).asString();
                 }
@@ -139,18 +199,49 @@ public class Connector implements AutoCloseable {
     }
 
     //Создание связи Person->Genre в БД
-    public void CreatePGRelation( final String nameNode1, final String nameNode2, final String relation) {
+    public void CreateRelation( Person person, Genre genre, final String relation) {
         try ( Session session = driver.session() ) {
             String createPG = session.writeTransaction( new TransactionWork<String>() {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    Result result = tx.run( "MATCH (a:Person), (b:Genre) " +
-                                    "WHERE a.name = $nameNode1 " +
-                                    "AND b.title = $nameNode2 " +
+                    String pname = person.getName();
+                    String prole = person.getRole();
+                    String gtitle = genre.getTitle();
+
+                    Result result = tx.run( "MATCH (a:" + prole + "), (b:Genre) " +
+                                    "WHERE a.name = $pname " +
+                                    "AND b.title = $gtitle " +
                                     "CREATE (a)-[r:" + relation + "]->(b) " +
                                     "RETURN type(r)",
-                            parameters( "nameNode1", nameNode1, "nameNode2", nameNode2,
+                            parameters( "pname", pname, "gtitle", gtitle,
+                                    "relation", relation ) );
+                    return result.single().get( 0 ).asString();
+                }
+            } );
+            System.out.println( createPG );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    //Создание связи Movie->Genre в БД
+    public void CreateRelation( Movie movie, Genre genre, final String relation) {
+        try ( Session session = driver.session() ) {
+            String createPG = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    String mtitle = movie.getTitle();
+                    String gtitle = genre.getTitle();
+
+                    Result result = tx.run( "MATCH (a:Movie), (b:Genre) " +
+                                    "WHERE a.title = $mtitle " +
+                                    "AND b.title = $gtitle " +
+                                    "CREATE (a)-[r:" + relation + "]->(b) " +
+                                    "RETURN type(r)",
+                            parameters( "mtitle", mtitle, "gtitle", gtitle,
                                     "relation", relation ) );
                     return result.single().get( 0 ).asString();
                 }
