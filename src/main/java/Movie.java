@@ -43,4 +43,15 @@ public class Movie {
             System.out.println(ex);
         }
     }
+
+    //Выпущен в прокат
+    public void releasedIn(Date date) {
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        {
+            connector.CreateRelation( this, date, "releasedIn" );
+        }
+        catch (Exception ex) {
+            System.out.println(ex);
+        }
+    }
 }

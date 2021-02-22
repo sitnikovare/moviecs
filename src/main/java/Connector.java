@@ -113,6 +113,28 @@ public class Connector implements AutoCloseable {
         }
     }
 
+    //Создание узла Date в БД
+    public void CreateNode(Date date) {
+        try ( Session session = driver.session() ) {
+            String createPNode = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    int dyear = date.getYear();
+
+                    Result result = tx.run( "CREATE (a:Date {year: $dyear} ) " +
+                                    "RETURN a.year + ', from node ' + id(a)",
+                            parameters( "dyear", dyear) );
+                    return result.single().get( 0 ).asString();
+                }
+            } );
+            System.out.println( createPNode );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
     //Создание связи Person->Movie в БД
     public void CreateRelation( Person person, Movie movie, final String relation) {
         try ( Session session = driver.session() ) {
@@ -242,6 +264,33 @@ public class Connector implements AutoCloseable {
                                     "CREATE (a)-[r:" + relation + "]->(b) " +
                                     "RETURN type(r)",
                             parameters( "mtitle", mtitle, "gtitle", gtitle,
+                                    "relation", relation ) );
+                    return result.single().get( 0 ).asString();
+                }
+            } );
+            System.out.println( createPG );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    //Создание связи Movie->Date в БД
+    public void CreateRelation( Movie movie, Date date, final String relation) {
+        try ( Session session = driver.session() ) {
+            String createPG = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    String mtitle = movie.getTitle();
+                    int dyear = date.getYear();
+
+                    Result result = tx.run( "MATCH (a:Movie), (b:Date) " +
+                                    "WHERE a.title = $mtitle " +
+                                    "AND b.year = $dyear " +
+                                    "CREATE (a)-[r:" + relation + "]->(b) " +
+                                    "RETURN type(r)",
+                            parameters( "mtitle", mtitle, "dyear", dyear,
                                     "relation", relation ) );
                     return result.single().get( 0 ).asString();
                 }

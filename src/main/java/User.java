@@ -1,5 +1,6 @@
 public class User extends Person {
 
+    public User() {}
     public User(String n) {
         name = n;
         role = "user";
