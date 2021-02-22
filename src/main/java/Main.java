@@ -2,10 +2,13 @@ public class Main {
 
     public static void main( String... args ) throws Exception
     {
-        try ( Connector greeter = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
-        {
-            greeter.printGreeting( "hello, world" );
-        }
-    }
+       User tUser = new User("testInit");
+       tUser.createNodeInDB();
 
+       Actor tAct = new Actor("testActor");
+       tAct.createNodeInDB();
+
+       Director tDir = new Director("testDir");
+       tDir.createNodeInDB();
+    }
 }
