@@ -24,4 +24,14 @@ public class Person {
             System.out.println(ex);
         }
     }
+
+    public void deleteFromDB() {
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        {
+            connector.DeleteNode(this);
+        }
+        catch (Exception ex) {
+            System.out.println(ex);
+        }
+    }
 }

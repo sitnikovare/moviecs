@@ -302,17 +302,19 @@ public class Connector implements AutoCloseable {
         }
     }
 
-    //удаление узла в БД
-    public void DeleteNode( final String message ) {
+    //удаление узла Person в БД
+    public void DeleteNode( Person person ) {
         try ( Session session = driver.session() ) {
             String greeting = session.writeTransaction( new TransactionWork<String>() {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    Result result = tx.run( "CREATE (a:Greeting) " +
-                                    "SET a.message = $message " +
-                                    "RETURN a.message + ', from node ' + id(a)",
-                            parameters( "message", message ) );
+                    String prole = person.getRole();
+                    String pname = person.getName();
+                    Result result = tx.run( "MATCH (n: " + prole +"{name: "+
+                                    pname +"})" +
+                            "DETACH DELETE n",
+                            parameters( "prole", prole, "pname", pname ) );
                     return result.single().get( 0 ).asString();
                 }
             } );
@@ -323,17 +325,202 @@ public class Connector implements AutoCloseable {
         }
     }
 
-    //удаление связи в БД
-    public void DeleteRelation( final String message ) {
+    //удаление узла Movie в БД
+    public void DeleteNode( Movie movie ) {
         try ( Session session = driver.session() ) {
             String greeting = session.writeTransaction( new TransactionWork<String>() {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    Result result = tx.run( "CREATE (a:Greeting) " +
-                                    "SET a.message = $message " +
-                                    "RETURN a.message + ', from node ' + id(a)",
-                            parameters( "message", message ) );
+                    String mtitle = movie.getTitle();
+                    Result result = tx.run( "MATCH (n: Movie {title: "+
+                                    mtitle +"})" +
+                                    "DETACH DELETE n",
+                            parameters( "mtitle", mtitle) );
+                    return result.single().get( 0 ).asString();
+                }
+            } );
+            System.out.println( greeting );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    //удаление узла Date в БД
+    public void DeleteNode( Date date ) {
+        try ( Session session = driver.session() ) {
+            String greeting = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    int dyear = date.getYear();
+                    Result result = tx.run( "MATCH (n: Date {year: "+
+                                    dyear +"})" +
+                                    "DETACH DELETE n",
+                            parameters( "dyear", dyear) );
+                    return result.single().get( 0 ).asString();
+                }
+            } );
+            System.out.println( greeting );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    //удаление узла Genre в БД
+    public void DeleteNode( Genre genre ) {
+        try ( Session session = driver.session() ) {
+            String greeting = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    String gtitle = genre.getTitle();
+                    Result result = tx.run( "MATCH (n: Genre {title: "+
+                                    gtitle +"})" +
+                                    "DETACH DELETE n",
+                            parameters( "gtitle", gtitle) );
+                    return result.single().get( 0 ).asString();
+                }
+            } );
+            System.out.println( greeting );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    //удаление связи от узлов Person к Movie в БД
+    public void DeleteRelation( Person person, Movie movie, final String relation ) {
+        try ( Session session = driver.session() ) {
+            String greeting = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    String pname = person.getName();
+                    String mtitle = movie.getTitle();
+
+                    Result result = tx.run( "MATCH (n {name: '"+
+                                    pname + "'})-[r: " + relation + "]->(b {title: '" + mtitle +
+                                    "'}) DELETE r RETURN n.name",
+                            parameters( "pname", pname, "mtitle", mtitle, "relation", relation ) );
+                    return result.single().get( 0 ).asString();
+                }
+            } );
+            System.out.println( greeting );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    //удаление связи от узлов Person к Genre в БД
+    public void DeleteRelation( Person person, Genre genre, final String relation ) {
+        try ( Session session = driver.session() ) {
+            String greeting = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    String pname = person.getName();
+                    String gtitle = genre.getTitle();
+
+                    Result result = tx.run( "MATCH (n {name: '"+
+                                    pname + "'})-[r:" + relation + "]->(b {title: '" + gtitle +
+                                    "' }) DELETE r RETURN n.name",
+                            parameters( "pname", pname, "gtitle", gtitle, "relation", relation ) );
+                    return result.single().get( 0 ).asString();
+                }
+            } );
+            System.out.println( greeting );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    //удаление связи от узлов Person->Person в БД
+    public void DeleteRelation( Person person1, Person person2, final String relation ) {
+        try ( Session session = driver.session() ) {
+            String greeting = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    String p1name = person1.getName();
+                    String p2name = person2.getName();
+
+                    Result result = tx.run( "MATCH (n {name: '" + p1name + "'})-[r:"
+                                    + relation + "]->(b {name: '" + p2name + "' }) DELETE r RETURN n.name",
+                            parameters( "p1name", p1name, "relation", relation, "p2name", p2name) );
+                    return result.single().get( 0 ).asString();
+                }
+            } );
+            System.out.println( greeting );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    //удаление связи от узлов Movie->Genre в БД
+    public void DeleteRelation( Movie movie, Genre genre, final String relation ) {
+        try ( Session session = driver.session() ) {
+            String greeting = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    String mtitle = movie.getTitle();
+                    String gtitle = genre.getTitle();
+
+                    Result result = tx.run( "MATCH (n {title: '"+
+                                    mtitle + "'})-[r:" + relation + "]->(b {title: $gtitle}) DELETE r RETURN n.title",
+                            parameters( "mtitle", mtitle, "relation", relation, "gtitle", gtitle ) );
+                    return result.single().get( 0 ).asString();
+                }
+            } );
+            System.out.println( greeting );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    //удаление связи от узлов Movie->Person в БД
+    public void DeleteRelation( Movie movie, Person person, final String relation ) {
+        try ( Session session = driver.session() ) {
+            String greeting = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    String mtitle = movie.getTitle();
+                    String pname = person.getName();
+
+                    Result result = tx.run( "MATCH (n {title: '"+
+                                    mtitle + "'})-[r:" + relation + "]->(b {name: $pname}) DELETE r RETURN n.title",
+                            parameters( "mtitle", mtitle, "relation", relation, "pname", pname ) );
+                    return result.single().get( 0 ).asString();
+                }
+            } );
+            System.out.println( greeting );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    //удаление связи от узлов Movie->Date в БД
+    public void DeleteRelation( Movie movie, Date date, final String relation ) {
+        try ( Session session = driver.session() ) {
+            String greeting = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    String mtitle = movie.getTitle();
+                    int dyear = date.getYear();
+
+                    Result result = tx.run( "MATCH (n {title: '"+
+                                    mtitle + "'})-[r:" + relation + "]->(b {year: $dyear}) DELETE r RETURN n.title",
+                            parameters( "mtitle", mtitle, "relation", relation, "dyear", dyear ) );
                     return result.single().get( 0 ).asString();
                 }
             } );

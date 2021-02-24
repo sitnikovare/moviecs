@@ -2,7 +2,7 @@ public class Main {
 
     public static void main( String... args ) throws Exception
     {
-       User tUs = new User("testInit");
+       User tUs = new User("testUser");
        Admin tAdm = new Admin("testAdmin");
        Actor tAct = new Actor("testActor");
        Director tDir = new Director("testDir");
@@ -23,21 +23,29 @@ public class Main {
 
 
         /*
-        Create all User relations
-        tUs.likes(tAct);
-        tUs.likes(tDir);
-        tUs.likes(tMov);
-        tUs.likes(tGen);
-        */
-
-        /*
-        Create other relations
+        //Create all User relations
+        tUs.likes(tAct, true);
+        tUs.likes(tDir, true);
+        tUs.likes(tMov, true);
+        tUs.likes(tGen, true);
+        //Create other relations
         tAct.playsIn(tMov);
         tMov.DirectedBy(tDir);
         tMov.isGenre(tGen);
         tMov.releasedIn(tDat);
         */
 
+        //удаление всех остальных связей
+        /*
+        tUs.likes(tAct, false);
+        tUs.likes(tDir, false);
+        tUs.likes(tMov, false);
+        tUs.likes(tGen, false);
+        tAct.playsIn(tMov, false);
+        tMov.DirectedBy(tDir, false);
+        tMov.isGenre(tGen, false);
+        tMov.releasedIn(tDat, false);
+         */
 
     }
 }

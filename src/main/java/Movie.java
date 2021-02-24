@@ -22,11 +22,25 @@ public class Movie {
         }
     }
 
-    //Установка режиссера
-    public void DirectedBy(Person person) {
+
+    public void deleteFromDB() {
         try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
-            connector.CreateRelation( this, person, "directedBy" );
+            connector.DeleteNode(this);
+        }
+        catch (Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    //Установка режиссера
+    public void DirectedBy(Person person, boolean orNot) {
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        {
+            if (orNot)
+                connector.CreateRelation( this, person, "directedBy" );
+            else
+                connector.DeleteRelation( this, person, "directedBy" );
         }
         catch (Exception ex) {
             System.out.println(ex);
@@ -34,10 +48,13 @@ public class Movie {
     }
 
     //Установка жанра
-    public void isGenre(Genre genre) {
+    public void isGenre(Genre genre, boolean orNot) {
         try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
-            connector.CreateRelation( this, genre, "isGenre" );
+            if (orNot)
+                connector.CreateRelation( this, genre, "isGenre" );
+            else
+                connector.DeleteRelation( this, genre, "isGenre" );
         }
         catch (Exception ex) {
             System.out.println(ex);
@@ -45,10 +62,13 @@ public class Movie {
     }
 
     //Выпущен в прокат
-    public void releasedIn(Date date) {
+    public void releasedIn(Date date, boolean orNot) {
         try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
-            connector.CreateRelation( this, date, "releasedIn" );
+            if (orNot)
+                connector.CreateRelation( this, date, "releasedIn" );
+            else
+                connector.DeleteRelation( this, date, "releasedIn" );
         }
         catch (Exception ex) {
             System.out.println(ex);
