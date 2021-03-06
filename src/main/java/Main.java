@@ -2,16 +2,17 @@ public class Main {
 
     public static void main( String... args ) throws Exception
     {
-       User tUs = new User("testUser");
+       User tUs = new User("testInit");
        Admin tAdm = new Admin("testAdmin");
        Actor tAct = new Actor("testActor");
        Director tDir = new Director("testDir");
        Movie tMov = new Movie("testFilm");
        Genre tGen = new Genre("testGenre");
-       Date tDat = new Date(2021);
+       Date tDat = new Date("2021");
 
-       /*
-       Init nodes in DB
+
+       //Init nodes in DB
+        /*
        tUs.initInDB();
        tAct.initInDB();
        tDir.initInDB();
@@ -19,21 +20,33 @@ public class Main {
        tGen.initInDB();
        tAdm.initInDB();
        tDat.initInDB();
-       */
+
+         */
 
 
-        /*
+
+
+
         //Create all User relations
+/*
         tUs.likes(tAct, true);
         tUs.likes(tDir, true);
         tUs.likes(tMov, true);
         tUs.likes(tGen, true);
+
+ */
+
+
         //Create other relations
-        tAct.playsIn(tMov);
-        tMov.DirectedBy(tDir);
-        tMov.isGenre(tGen);
-        tMov.releasedIn(tDat);
-        */
+/*
+        tAct.playsIn(tMov, true);
+        tMov.DirectedBy(tDir, true);
+        tMov.isGenre(tGen, true);
+        tMov.releasedIn(tDat, true);
+
+ */
+
+
 
         //удаление всех остальных связей
         /*
@@ -45,7 +58,54 @@ public class Main {
         tMov.DirectedBy(tDir, false);
         tMov.isGenre(tGen, false);
         tMov.releasedIn(tDat, false);
+        */
+
+        //Удаление всех узлов
+        /*
+        tUs.deleteFromDB();
+        tAct.deleteFromDB();
+        tDir.deleteFromDB();
+        tMov.deleteFromDB();
+        tGen.deleteFromDB();
+        tAdm.deleteFromDB();
+        tDat.deleteFromDB();
+        */
+
+        //Поиск относительно фильма
+        /*
+        tMov.findDate();
+        tMov.findGenre();
+        tMov.findDirector();
+        tMov.findActor();
+        tMov.findLikers();
          */
 
+        //Поиск относительно актера
+        /*
+        tAct.findMovies();
+        tAct.findLikers();
+         */
+
+        //Поиск относительно режиссера
+        /*
+        tDir.findMovies();
+        tDir.findLikers();
+         */
+
+        //Поиск относительно жанра
+        /*
+        tGen.findMovies();
+        tGen.findLikers();
+         */
+
+        //Поиск относительно даты
+        //tDat.findMovies();
+
+        //Поиск относительно юзера - БОЛЬШЕ ОДНОГО НЕ ВЕРНУТ
+        /*
+        tUs.findMovies();
+        tUs.findActNDir();
+        tUs.findGenres();
+         */
     }
 }

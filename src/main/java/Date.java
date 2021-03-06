@@ -1,19 +1,38 @@
 public class Date {
-    private int year;
+    private String year;
 
-    public Date(int y) {
-        if (y >= 0)
-            year = y;
-        else return;
+    public Date(String y) {
+        year = y;
     }
 
-    int getYear() { return year;}
+    String getYear() { return year;}
 
     //Создание узла Date в базе
     public void initInDB() {
         try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
             connector.CreateNode(this);
+        }
+        catch (Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    public void deleteFromDB() {
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        {
+            connector.DeleteNode(this);
+        }
+        catch (Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    //Найти фильмы данного года
+    public void findMovies() {
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        {
+            connector.FindNode( this, "releasedIn");
         }
         catch (Exception ex) {
             System.out.println(ex);

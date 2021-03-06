@@ -120,7 +120,7 @@ public class Connector implements AutoCloseable {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    int dyear = date.getYear();
+                    String dyear = date.getYear();
 
                     Result result = tx.run( "CREATE (a:Date {year: $dyear} ) " +
                                     "RETURN a.year + ', from node ' + id(a)",
@@ -208,7 +208,8 @@ public class Connector implements AutoCloseable {
                                     "AND b.name = $p2name " +
                                     "CREATE (a)-[r:" + relation + "]->(b) " +
                                     "RETURN type(r)",
-                            parameters( "p1name", p1name, "p2name", p2name,
+                            parameters( "p1role", p1role, "p2name", p2role,
+                                    "p1name", p1name, "p2name", p2name,
                                     "relation", relation ) );
                     return result.single().get( 0 ).asString();
                 }
@@ -283,7 +284,7 @@ public class Connector implements AutoCloseable {
                 public String execute( Transaction tx )
                 {
                     String mtitle = movie.getTitle();
-                    int dyear = date.getYear();
+                    String dyear = date.getYear();
 
                     Result result = tx.run( "MATCH (a:Movie), (b:Date) " +
                                     "WHERE a.title = $mtitle " +
@@ -311,9 +312,8 @@ public class Connector implements AutoCloseable {
                 {
                     String prole = person.getRole();
                     String pname = person.getName();
-                    Result result = tx.run( "MATCH (n: " + prole +"{name: "+
-                                    pname +"})" +
-                            "DETACH DELETE n",
+                    Result result = tx.run( "MATCH (n: " + prole + " {name: '" + pname + "'})" +
+                            " DELETE n RETURN n.name",
                             parameters( "prole", prole, "pname", pname ) );
                     return result.single().get( 0 ).asString();
                 }
@@ -333,9 +333,8 @@ public class Connector implements AutoCloseable {
                 public String execute( Transaction tx )
                 {
                     String mtitle = movie.getTitle();
-                    Result result = tx.run( "MATCH (n: Movie {title: "+
-                                    mtitle +"})" +
-                                    "DETACH DELETE n",
+                    Result result = tx.run( "MATCH (n: Movie {title: '" + mtitle + "'})" +
+                                    " DELETE n RETURN n.title",
                             parameters( "mtitle", mtitle) );
                     return result.single().get( 0 ).asString();
                 }
@@ -354,10 +353,9 @@ public class Connector implements AutoCloseable {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    int dyear = date.getYear();
-                    Result result = tx.run( "MATCH (n: Date {year: "+
-                                    dyear +"})" +
-                                    "DETACH DELETE n",
+                    String dyear = date.getYear();
+                    Result result = tx.run( "MATCH (n: Date {year: $dyear })" +
+                                    " DELETE n RETURN n.year",
                             parameters( "dyear", dyear) );
                     return result.single().get( 0 ).asString();
                 }
@@ -377,9 +375,8 @@ public class Connector implements AutoCloseable {
                 public String execute( Transaction tx )
                 {
                     String gtitle = genre.getTitle();
-                    Result result = tx.run( "MATCH (n: Genre {title: "+
-                                    gtitle +"})" +
-                                    "DETACH DELETE n",
+                    Result result = tx.run( "MATCH (n: Genre {title: $gtitle })" +
+                                    " DELETE n RETURN n.title",
                             parameters( "gtitle", gtitle) );
                     return result.single().get( 0 ).asString();
                 }
@@ -516,7 +513,7 @@ public class Connector implements AutoCloseable {
                 public String execute( Transaction tx )
                 {
                     String mtitle = movie.getTitle();
-                    int dyear = date.getYear();
+                    String dyear = date.getYear();
 
                     Result result = tx.run( "MATCH (n {title: '"+
                                     mtitle + "'})-[r:" + relation + "]->(b {year: $dyear}) DELETE r RETURN n.title",
@@ -531,18 +528,19 @@ public class Connector implements AutoCloseable {
         }
     }
 
-    //Найти узел в БД
-    public void FindNode( final String message ) {
+    //Найти узлы от узла Date
+    public void FindNode( Date date, final String rel) {
         try ( Session session = driver.session() ) {
             String greeting = session.writeTransaction( new TransactionWork<String>() {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    Result result = tx.run( "CREATE (a:Greeting) " +
-                                    "SET a.message = $message " +
-                                    "RETURN a.message + ', from node ' + id(a)",
-                            parameters( "message", message ) );
-                    return result.single().get( 0 ).asString();
+                    String dyear = date.getYear();
+
+                        Result result = tx.run("MATCH (d:Date {year: $dyear})"
+                                        + "<-[r:" + rel + "]" + "-(m) RETURN m.title",
+                                parameters("dyear", dyear, "rel", rel));
+                        return result.single().get(0).asString();
                 }
             } );
             System.out.println( greeting );
@@ -551,4 +549,146 @@ public class Connector implements AutoCloseable {
             System.out.println(ex);
         }
     }
+
+    //Найти узлы от узла Genre
+    public void FindNode( Genre genre, final String rel, boolean isMovie ) {
+        try ( Session session = driver.session() ) {
+            String greeting = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    String gtitle = genre.getTitle();
+
+                    if (isMovie) {
+                        Result result = tx.run("MATCH (g:Genre {title: $gtitle})"
+                                        + "<-[r:" + rel + "]" + "-(m) RETURN m.title",
+                                parameters("gtitle", gtitle, "rel", rel));
+                        return result.single().get(0).asString();
+
+                    }
+                    else {
+                        Result result = tx.run( "MATCH (g:Genre {title: $gtitle})"
+                                        + "<-[r:"+ rel +"]" + "-(m) RETURN m.name",
+                                parameters( "gtitle", gtitle, "rel", rel ) );
+                        return result.single().get( 0 ).asString();
+                    }
+                }
+            } );
+            System.out.println( greeting );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    //Найти узлы от узла Person
+    public void FindNode( Person person, final String rel, boolean isDir, boolean isMovie) {
+        try ( Session session = driver.session() ) {
+            String greeting = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    String pname = person.getName();
+                    String prole = person.getRole();
+
+                    if (isMovie && isDir) {
+                        Result result = tx.run( "MATCH (p: "+prole+" {name: $pname})"
+                                        + "<-[r:"+ rel +"]" + "-(m) RETURN m.title",
+                                parameters( "prole", prole, "pname", pname, "rel", rel ) );
+                        return result.single().get( 0 ).asString();
+
+                    }
+                    if (isMovie) {
+                        Result result = tx.run( "MATCH (p: "+prole+" {name: $pname})"
+                                        + "-[r:"+ rel +"]" + "->(m) RETURN m.title",
+                                parameters( "prole", prole, "pname", pname, "rel", rel ) );
+                        return result.single().get( 0 ).asString();
+
+                    }
+                    else {
+                        Result result = tx.run( "MATCH (p: "+prole+" {name: $pname})"
+                                + "<-[r:"+ rel +"]" + "-(m) RETURN m.name",
+                                parameters( "prole", prole, "pname", pname, "rel", rel ) );
+                        return result.single().get( 0 ).asString();
+                    }
+                }
+            } );
+            System.out.println( greeting );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    //Найти узлы от узла Person
+    public void FindNode( User user, final String rel, boolean isMG) {
+        try ( Session session = driver.session() ) {
+            String greeting = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    String pname = user.getName();
+                    String prole = user.getRole();
+
+                    if (isMG) {
+                        Result result = tx.run( "MATCH (p: "+prole+" {name: $pname})"
+                                        + "-[r:"+ rel +"]" + "->(m) RETURN m.title LIMIT 1",
+                                parameters( "prole", prole, "pname", pname, "rel", rel ) );
+                        return result.single().get( 0 ).asString();
+
+                    }
+                    else {
+                        Result result = tx.run( "MATCH (p: "+prole+" {name: $pname})"
+                                        + "-[r:"+ rel +"]" + "->(m) RETURN m.name LIMIT 1",
+                                parameters( "prole", prole, "pname", pname, "rel", rel ) );
+                        return result.single().get( 0 ).asString();
+                    }
+                }
+            } );
+            System.out.println( greeting );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    //Найти узлы от Movie
+    public void FindNode( Movie movie, final String rel, boolean isDate, boolean isGenre ) {
+        try ( Session session = driver.session() ) {
+            String greeting = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    String mtitle = movie.getTitle();
+
+                    if (isDate) {
+                        Result result = tx.run( "MATCH (m:Movie {title: $mtitle})"
+                                        + "-[:"+ rel + "]" + "->(d) RETURN d.year",
+                                parameters( "mtitle", mtitle, "rel", rel ) );
+                        return result.single().get( 0 ).asString() + "";
+                    }
+                    else if (isGenre) {
+                        Result result = tx.run( "MATCH (m:Movie {title: $mtitle})"
+                                        + "-[:"+ rel + "]" + "->(d) RETURN d.title",
+                                parameters( "mtitle", mtitle, "rel", rel ) );
+                        return result.single().get( 0 ).asString();
+                    }
+                    else {
+                        Result result = tx.run( "MATCH (m:Movie {title: $mtitle})"
+                                        + "<-[:"+ rel +"]" + "-(person) RETURN person.name",
+                                parameters( "mtitle", mtitle, "rel", rel ) );
+                        return result.single().get( 0 ).asString();
+                    }
+
+                }
+            } );
+            System.out.println( greeting );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+
+
 }

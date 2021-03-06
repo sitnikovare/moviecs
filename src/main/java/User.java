@@ -3,7 +3,7 @@ public class User extends Person {
     public User() {}
     public User(String n) {
         name = n;
-        role = "user";
+        role = "User";
     }
 
     //Создание связи от User к Movie
@@ -48,7 +48,37 @@ public class User extends Person {
         }
     }
 
-    public void findFilm() {}
-    public void findActor() {}
+    //Найти любимые фильмы
+    public void findMovies() {
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        {
+            connector.FindNode( this, "likes", true);
+        }
+        catch (Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    //Найти любимых актеров и режиссеров
+    public void findActNDir() {
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        {
+            connector.FindNode( this, "likes", false);
+        }
+        catch (Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    //Найти любимые жанры
+    public void findGenres() {
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        {
+            connector.FindNode( this, "likes", true);
+        }
+        catch (Exception ex) {
+            System.out.println(ex);
+        }
+    }
 
 }
