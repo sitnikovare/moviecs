@@ -1,11 +1,11 @@
 public class Genre {
-    private String title;
+    private String name;
 
     public Genre(String g) {
-        title = g;
+        name = g;
     }
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
     //Создание узла Genre в базе

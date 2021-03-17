@@ -1,14 +1,14 @@
 public class Movie {
-    private String title;
+    private String name;
 
     public Movie() {};
 
     public Movie(String t) {
-        title = t;
+        name = t;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
     //Создание узла Movie в базе

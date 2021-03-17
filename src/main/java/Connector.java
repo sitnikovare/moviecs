@@ -76,11 +76,11 @@ public class Connector implements AutoCloseable {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    String mtitle = movie.getTitle();
+                    String mname = movie.getName();
 
-                    Result result = tx.run( "CREATE (a:Movie {title: $mtitle} ) " +
-                                    "RETURN a.title + ', from node ' + id(a)",
-                            parameters( "mtitle", mtitle) );
+                    Result result = tx.run( "CREATE (a:Movie {name: $mname} ) " +
+                                    "RETURN a.name + ', from node ' + id(a)",
+                            parameters( "mname", mname) );
                     return result.single().get( 0 ).asString();
                 }
             } );
@@ -98,11 +98,11 @@ public class Connector implements AutoCloseable {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    String gtitle = genre.getTitle();
+                    String gname = genre.getName();
 
-                    Result result = tx.run( "CREATE (a:Genre {title: $gtitle} ) " +
-                                    "RETURN a.title + ', from node ' + id(a)",
-                            parameters( "gtitle", gtitle) );
+                    Result result = tx.run( "CREATE (a:Genre {name: $gname} ) " +
+                                    "RETURN a.name + ', from node ' + id(a)",
+                            parameters( "gname", gname) );
                     return result.single().get( 0 ).asString();
                 }
             } );
@@ -144,14 +144,14 @@ public class Connector implements AutoCloseable {
                 {
                     String prole = person.getRole();
                     String pname = person.getName();
-                    String mtitle = movie.getTitle();
+                    String mname = movie.getName();
 
                     Result result = tx.run( "MATCH (a:" + prole +"), (b:Movie) " +
                                     "WHERE a.name = $pname " +
-                                    "AND b.title = $mtitle " +
+                                    "AND b.name = $mname " +
                                     "CREATE (a)-[r:" + relation + "]->(b) " +
                                     "RETURN type(r)",
-                            parameters( "pname", pname, "mtitle", mtitle,
+                            parameters( "pname", pname, "mname", mname,
                                     "relation", relation ) );
                     return result.single().get( 0 ).asString();
                 }
@@ -172,14 +172,14 @@ public class Connector implements AutoCloseable {
                 {
                     String prole = person.getRole();
                     String pname = person.getName();
-                    String mtitle = movie.getTitle();
+                    String mname = movie.getName();
 
                     Result result = tx.run( "MATCH (a:Movie), (b:" + prole + ") " +
-                                    "WHERE a.title = $mtitle " +
+                                    "WHERE a.name = $mname " +
                                     "AND b.name = $pname " +
                                     "CREATE (a)-[r:" + relation + "]->(b) " +
                                     "RETURN type(r)",
-                            parameters( "mtitle", mtitle, "pname", pname,
+                            parameters( "mname", mname, "pname", pname,
                                     "relation", relation ) );
                     return result.single().get( 0 ).asString();
                 }
@@ -230,14 +230,14 @@ public class Connector implements AutoCloseable {
                 {
                     String pname = person.getName();
                     String prole = person.getRole();
-                    String gtitle = genre.getTitle();
+                    String gname = genre.getName();
 
                     Result result = tx.run( "MATCH (a:" + prole + "), (b:Genre) " +
                                     "WHERE a.name = $pname " +
-                                    "AND b.title = $gtitle " +
+                                    "AND b.name = $gname " +
                                     "CREATE (a)-[r:" + relation + "]->(b) " +
                                     "RETURN type(r)",
-                            parameters( "pname", pname, "gtitle", gtitle,
+                            parameters( "pname", pname, "gname", gname,
                                     "relation", relation ) );
                     return result.single().get( 0 ).asString();
                 }
@@ -256,15 +256,15 @@ public class Connector implements AutoCloseable {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    String mtitle = movie.getTitle();
-                    String gtitle = genre.getTitle();
+                    String mname = movie.getName();
+                    String gname = genre.getName();
 
                     Result result = tx.run( "MATCH (a:Movie), (b:Genre) " +
-                                    "WHERE a.title = $mtitle " +
-                                    "AND b.title = $gtitle " +
+                                    "WHERE a.name = $mname " +
+                                    "AND b.name = $gname " +
                                     "CREATE (a)-[r:" + relation + "]->(b) " +
                                     "RETURN type(r)",
-                            parameters( "mtitle", mtitle, "gtitle", gtitle,
+                            parameters( "mname", mname, "gname", gname,
                                     "relation", relation ) );
                     return result.single().get( 0 ).asString();
                 }
@@ -283,15 +283,15 @@ public class Connector implements AutoCloseable {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    String mtitle = movie.getTitle();
+                    String mname = movie.getName();
                     String dyear = date.getYear();
 
                     Result result = tx.run( "MATCH (a:Movie), (b:Date) " +
-                                    "WHERE a.title = $mtitle " +
+                                    "WHERE a.name = $mname " +
                                     "AND b.year = $dyear " +
                                     "CREATE (a)-[r:" + relation + "]->(b) " +
                                     "RETURN type(r)",
-                            parameters( "mtitle", mtitle, "dyear", dyear,
+                            parameters( "mname", mname, "dyear", dyear,
                                     "relation", relation ) );
                     return result.single().get( 0 ).asString();
                 }
@@ -332,10 +332,10 @@ public class Connector implements AutoCloseable {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    String mtitle = movie.getTitle();
-                    Result result = tx.run( "MATCH (n: Movie {title: '" + mtitle + "'})" +
-                                    " DELETE n RETURN n.title",
-                            parameters( "mtitle", mtitle) );
+                    String mname = movie.getName();
+                    Result result = tx.run( "MATCH (n: Movie {name: '" + mname + "'})" +
+                                    " DELETE n RETURN n.name",
+                            parameters( "mname", mname) );
                     return result.single().get( 0 ).asString();
                 }
             } );
@@ -374,10 +374,10 @@ public class Connector implements AutoCloseable {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    String gtitle = genre.getTitle();
-                    Result result = tx.run( "MATCH (n: Genre {title: $gtitle })" +
-                                    " DELETE n RETURN n.title",
-                            parameters( "gtitle", gtitle) );
+                    String gname = genre.getName();
+                    Result result = tx.run( "MATCH (n: Genre {name: $gname })" +
+                                    " DELETE n RETURN n.name",
+                            parameters( "gname", gname) );
                     return result.single().get( 0 ).asString();
                 }
             } );
@@ -396,12 +396,12 @@ public class Connector implements AutoCloseable {
                 public String execute( Transaction tx )
                 {
                     String pname = person.getName();
-                    String mtitle = movie.getTitle();
+                    String mname = movie.getName();
 
                     Result result = tx.run( "MATCH (n {name: '"+
-                                    pname + "'})-[r: " + relation + "]->(b {title: '" + mtitle +
+                                    pname + "'})-[r: " + relation + "]->(b {name: '" + mname +
                                     "'}) DELETE r RETURN n.name",
-                            parameters( "pname", pname, "mtitle", mtitle, "relation", relation ) );
+                            parameters( "pname", pname, "mname", mname, "relation", relation ) );
                     return result.single().get( 0 ).asString();
                 }
             } );
@@ -420,12 +420,12 @@ public class Connector implements AutoCloseable {
                 public String execute( Transaction tx )
                 {
                     String pname = person.getName();
-                    String gtitle = genre.getTitle();
+                    String gname = genre.getName();
 
                     Result result = tx.run( "MATCH (n {name: '"+
-                                    pname + "'})-[r:" + relation + "]->(b {title: '" + gtitle +
+                                    pname + "'})-[r:" + relation + "]->(b {name: '" + gname +
                                     "' }) DELETE r RETURN n.name",
-                            parameters( "pname", pname, "gtitle", gtitle, "relation", relation ) );
+                            parameters( "pname", pname, "gname", gname, "relation", relation ) );
                     return result.single().get( 0 ).asString();
                 }
             } );
@@ -466,12 +466,12 @@ public class Connector implements AutoCloseable {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    String mtitle = movie.getTitle();
-                    String gtitle = genre.getTitle();
+                    String mname = movie.getName();
+                    String gname = genre.getName();
 
-                    Result result = tx.run( "MATCH (n {title: '"+
-                                    mtitle + "'})-[r:" + relation + "]->(b {title: $gtitle}) DELETE r RETURN n.title",
-                            parameters( "mtitle", mtitle, "relation", relation, "gtitle", gtitle ) );
+                    Result result = tx.run( "MATCH (n {name: '"+
+                                    mname + "'})-[r:" + relation + "]->(b {name: $gname}) DELETE r RETURN n.name",
+                            parameters( "mname", mname, "relation", relation, "gname", gname ) );
                     return result.single().get( 0 ).asString();
                 }
             } );
@@ -489,12 +489,12 @@ public class Connector implements AutoCloseable {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    String mtitle = movie.getTitle();
+                    String mname = movie.getName();
                     String pname = person.getName();
 
-                    Result result = tx.run( "MATCH (n {title: '"+
-                                    mtitle + "'})-[r:" + relation + "]->(b {name: $pname}) DELETE r RETURN n.title",
-                            parameters( "mtitle", mtitle, "relation", relation, "pname", pname ) );
+                    Result result = tx.run( "MATCH (n {name: '"+
+                                    mname + "'})-[r:" + relation + "]->(b {name: $pname}) DELETE r RETURN n.name",
+                            parameters( "mname", mname, "relation", relation, "pname", pname ) );
                     return result.single().get( 0 ).asString();
                 }
             } );
@@ -512,12 +512,12 @@ public class Connector implements AutoCloseable {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    String mtitle = movie.getTitle();
+                    String mname = movie.getName();
                     String dyear = date.getYear();
 
-                    Result result = tx.run( "MATCH (n {title: '"+
-                                    mtitle + "'})-[r:" + relation + "]->(b {year: $dyear}) DELETE r RETURN n.title",
-                            parameters( "mtitle", mtitle, "relation", relation, "dyear", dyear ) );
+                    Result result = tx.run( "MATCH (n {name: '"+
+                                    mname + "'})-[r:" + relation + "]->(b {year: $dyear}) DELETE r RETURN n.name",
+                            parameters( "mname", mname, "relation", relation, "dyear", dyear ) );
                     return result.single().get( 0 ).asString();
                 }
             } );
@@ -538,7 +538,7 @@ public class Connector implements AutoCloseable {
                     String dyear = date.getYear();
 
                         Result result = tx.run("MATCH (d:Date {year: $dyear})"
-                                        + "<-[r:" + rel + "]" + "-(m) RETURN m.title",
+                                        + "<-[r:" + rel + "]" + "-(m) RETURN m.name",
                                 parameters("dyear", dyear, "rel", rel));
                         return result.single().get(0).asString();
                 }
@@ -557,19 +557,19 @@ public class Connector implements AutoCloseable {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    String gtitle = genre.getTitle();
+                    String gname = genre.getName();
 
                     if (isMovie) {
-                        Result result = tx.run("MATCH (g:Genre {title: $gtitle})"
-                                        + "<-[r:" + rel + "]" + "-(m) RETURN m.title",
-                                parameters("gtitle", gtitle, "rel", rel));
+                        Result result = tx.run("MATCH (g:Genre {name: $gname})"
+                                        + "<-[r:" + rel + "]" + "-(m) RETURN m.name",
+                                parameters("gname", gname, "rel", rel));
                         return result.single().get(0).asString();
 
                     }
                     else {
-                        Result result = tx.run( "MATCH (g:Genre {title: $gtitle})"
+                        Result result = tx.run( "MATCH (g:Genre {name: $gname})"
                                         + "<-[r:"+ rel +"]" + "-(m) RETURN m.name",
-                                parameters( "gtitle", gtitle, "rel", rel ) );
+                                parameters( "gname", gname, "rel", rel ) );
                         return result.single().get( 0 ).asString();
                     }
                 }
@@ -582,7 +582,8 @@ public class Connector implements AutoCloseable {
     }
 
     //Найти узлы от узла Person
-    public void FindNode( Person person, final String rel, boolean isDir, boolean isMovie) {
+    public String FindNode( Person person, final String rel, boolean isDir, boolean isMovie) {
+        final String[] resultStr = {"result is null"};
         try ( Session session = driver.session() ) {
             String greeting = session.writeTransaction( new TransactionWork<String>() {
                 @Override
@@ -593,15 +594,17 @@ public class Connector implements AutoCloseable {
 
                     if (isMovie && isDir) {
                         Result result = tx.run( "MATCH (p: "+prole+" {name: $pname})"
-                                        + "<-[r:"+ rel +"]" + "-(m) RETURN m.title",
+                                        + "<-[r:"+ rel +"]" + "-(m) RETURN m.name",
                                 parameters( "prole", prole, "pname", pname, "rel", rel ) );
+                        resultStr[0] = result.single().get( 0 ).asString();
                         return result.single().get( 0 ).asString();
 
                     }
                     if (isMovie) {
                         Result result = tx.run( "MATCH (p: "+prole+" {name: $pname})"
-                                        + "-[r:"+ rel +"]" + "->(m) RETURN m.title",
+                                        + "-[r:"+ rel +"]" + "->(m) RETURN m.name",
                                 parameters( "prole", prole, "pname", pname, "rel", rel ) );
+                        resultStr[0] = result.single().get( 0 ).asString();
                         return result.single().get( 0 ).asString();
 
                     }
@@ -609,6 +612,7 @@ public class Connector implements AutoCloseable {
                         Result result = tx.run( "MATCH (p: "+prole+" {name: $pname})"
                                 + "<-[r:"+ rel +"]" + "-(m) RETURN m.name",
                                 parameters( "prole", prole, "pname", pname, "rel", rel ) );
+                        resultStr[0] = result.single().get( 0 ).asString();
                         return result.single().get( 0 ).asString();
                     }
                 }
@@ -618,6 +622,7 @@ public class Connector implements AutoCloseable {
         catch(Exception ex) {
             System.out.println(ex);
         }
+        return resultStr[0];
     }
 
     //Найти узлы от узла Person
@@ -632,7 +637,7 @@ public class Connector implements AutoCloseable {
 
                     if (isMG) {
                         Result result = tx.run( "MATCH (p: "+prole+" {name: $pname})"
-                                        + "-[r:"+ rel +"]" + "->(m) RETURN m.title LIMIT 1",
+                                        + "-[r:"+ rel +"]" + "->(m) RETURN m.name LIMIT 1",
                                 parameters( "prole", prole, "pname", pname, "rel", rel ) );
                         return result.single().get( 0 ).asString();
 
@@ -659,24 +664,24 @@ public class Connector implements AutoCloseable {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    String mtitle = movie.getTitle();
+                    String mname = movie.getName();
 
                     if (isDate) {
-                        Result result = tx.run( "MATCH (m:Movie {title: $mtitle})"
+                        Result result = tx.run( "MATCH (m:Movie {name: $mname})"
                                         + "-[:"+ rel + "]" + "->(d) RETURN d.year",
-                                parameters( "mtitle", mtitle, "rel", rel ) );
+                                parameters( "mname", mname, "rel", rel ) );
                         return result.single().get( 0 ).asString() + "";
                     }
                     else if (isGenre) {
-                        Result result = tx.run( "MATCH (m:Movie {title: $mtitle})"
-                                        + "-[:"+ rel + "]" + "->(d) RETURN d.title",
-                                parameters( "mtitle", mtitle, "rel", rel ) );
+                        Result result = tx.run( "MATCH (m:Movie {name: $mname})"
+                                        + "-[:"+ rel + "]" + "->(d) RETURN d.name",
+                                parameters( "mname", mname, "rel", rel ) );
                         return result.single().get( 0 ).asString();
                     }
                     else {
-                        Result result = tx.run( "MATCH (m:Movie {title: $mtitle})"
+                        Result result = tx.run( "MATCH (m:Movie {name: $mname})"
                                         + "<-[:"+ rel +"]" + "-(person) RETURN person.name",
-                                parameters( "mtitle", mtitle, "rel", rel ) );
+                                parameters( "mname", mname, "rel", rel ) );
                         return result.single().get( 0 ).asString();
                     }
 

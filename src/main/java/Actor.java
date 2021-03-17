@@ -9,7 +9,7 @@ public class Actor extends Person{
     public void playsIn(Movie movie, boolean orNot) {
         try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
-            String mTitle = movie.getTitle();
+            String mName = movie.getName();
             if (orNot)
                 connector.CreateRelation( this,  movie, "playsIn");
             else
@@ -21,14 +21,17 @@ public class Actor extends Person{
     }
 
     //Найти фильмы, в которых играл актер
-    public void findMovies() {
+    public String findMovies() {
+        String[] resultStr = {"retult is null"};
+
         try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
-                connector.FindNode( this, "playsIn", false, true);
+                resultStr[0] = connector.FindNode( this, "playsIn", false, true);
         }
         catch (Exception ex) {
             System.out.println(ex);
-        }
+    }
+    return resultStr[0];
     }
 
     //Найти юзеров, которым нравится актер
