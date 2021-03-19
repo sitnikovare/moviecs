@@ -33,8 +33,8 @@ public class Main {
        tGen.initInDB();
        tAdm.initInDB();
        tDat.initInDB();
-
 */
+
 
 
         //Create all User relations
@@ -43,17 +43,17 @@ public class Main {
         tUs.likes(tDir, true);
         tUs.likes(tMov, true);
         tUs.likes(tGen, true);
+
 */
 
 
-
         //Create other relations
-
+/*
         tAct.playsIn(tMov, true);
         tMov.DirectedBy(tDir, true);
         tMov.isGenre(tGen, true);
         tMov.releasedIn(tDat, true);
-
+*/
 
 
 
