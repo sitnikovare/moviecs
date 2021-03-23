@@ -694,6 +694,25 @@ public class Connector implements AutoCloseable {
         }
     }
 
-
-
+    //Найти конкретный узел
+    public String FindNode( final String nodeName ) {
+        final String[] resId = new String[1];
+        try ( Session session = driver.session() ) {
+            String greeting = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    Result result = tx.run( "MATCH (n {name: $nodeName}) RETURN n.id",
+                            parameters( "nodeName", nodeName) );
+                    resId[0] = result.single().get( 0 ).asString();
+                    return result.single().get( 0 ).asString();
+                }
+            } );
+            System.out.println( greeting );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+        return resId[0];
+    }
 }

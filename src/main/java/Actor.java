@@ -7,7 +7,7 @@ public class Actor extends Person{
 
     //Создание связи актер играл в таком-то фильме
     public void playsIn(Movie movie, boolean orNot) {
-        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
         {
             String mName = movie.getName();
             if (orNot)
@@ -24,7 +24,7 @@ public class Actor extends Person{
     public String findMovies() {
         String[] resultStr = {"retult is null"};
 
-        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
         {
                 resultStr[0] = connector.FindNode( this, "playsIn", false, true);
         }
@@ -36,7 +36,7 @@ public class Actor extends Person{
 
     //Найти юзеров, которым нравится актер
     public void findLikers() {
-        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
         {
             connector.FindNode( this, "likes", false, false);
         }

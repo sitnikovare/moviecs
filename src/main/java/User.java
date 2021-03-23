@@ -8,7 +8,7 @@ public class User extends Person {
 
     //Создание связи от User к Movie
     public void likes(Movie movie, boolean orNot) {
-        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
         {
             if (orNot)
                 connector.CreateRelation( this, movie, "likes" );
@@ -22,7 +22,7 @@ public class User extends Person {
 
     //Создание связи от User к Person
     public void likes(Person person, boolean orNot) {
-        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
         {
             if (orNot)
                 connector.CreateRelation( this, person, "likes" );
@@ -36,7 +36,7 @@ public class User extends Person {
 
     //Создание связи от User к Genre
     public void likes(Genre genre, boolean orNot) {
-        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
         {
             if (orNot)
                 connector.CreateRelation( this, genre, "likes" );
@@ -50,7 +50,7 @@ public class User extends Person {
 
     //Найти любимые фильмы
     public void findMovies() {
-        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
         {
             connector.FindNode( this, "likes", true);
         }
@@ -61,7 +61,7 @@ public class User extends Person {
 
     //Найти любимых актеров и режиссеров
     public void findActNDir() {
-        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
         {
             connector.FindNode( this, "likes", false);
         }
@@ -72,7 +72,7 @@ public class User extends Person {
 
     //Найти любимые жанры
     public void findGenres() {
-        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
         {
             connector.FindNode( this, "likes", true);
         }

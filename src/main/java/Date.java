@@ -9,7 +9,7 @@ public class Date {
 
     //Создание узла Date в базе
     public void initInDB() {
-        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
         {
             connector.CreateNode(this);
         }
@@ -19,7 +19,7 @@ public class Date {
     }
 
     public void deleteFromDB() {
-        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
         {
             connector.DeleteNode(this);
         }
@@ -30,7 +30,7 @@ public class Date {
 
     //Найти фильмы данного года
     public void findMovies() {
-        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
         {
             connector.FindNode( this, "releasedIn");
         }

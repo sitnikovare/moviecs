@@ -16,7 +16,7 @@ public class Person {
 
     //Создание узла Person в базе
     public void initInDB() {
-        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
         {
             connector.CreateNode( this);
         }
@@ -26,7 +26,7 @@ public class Person {
     }
 
     public void deleteFromDB() {
-        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
         {
             connector.DeleteNode(this);
         }

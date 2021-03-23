@@ -10,7 +10,7 @@ public class Genre {
 
     //Создание узла Genre в базе
     public void initInDB() {
-        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
         {
             connector.CreateNode( this);
         }
@@ -20,7 +20,7 @@ public class Genre {
     }
 
     public void deleteFromDB() {
-        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
         {
             connector.DeleteNode(this);
         }
@@ -31,7 +31,7 @@ public class Genre {
 
     //Найти фильмы данного жанра
     public void findMovies() {
-        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
         {
             connector.FindNode( this, "isGenre", true);
         }
@@ -42,7 +42,7 @@ public class Genre {
 
     //Найти юзеров, которым нравится жанр
     public void findLikers() {
-        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
         {
             connector.FindNode( this, "likes", false);
         }
