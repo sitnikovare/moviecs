@@ -1,16 +1,38 @@
 public class Genre {
     private String name;
+    private String rate = "0";
 
     public Genre(String g) {
         name = g;
     }
+    public Genre(String g, String r) {
+        name = g;
+        rate = r;
+    }
     public String getName() {
         return name;
+    }
+    public String getRate() {
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        {
+            String rate = connector.recalculateRating(this.name, false, false, false, true);
+            Double drate = Double.valueOf(rate);
+            rate = String.format("%.3f", drate);
+            setRate(rate);
+        }
+        catch (Exception ex) {
+            System.out.println(ex);
+        }
+
+        return rate;
+    }
+    public void setRate(String r) {
+        rate = r;
     }
 
     //Создание узла Genre в базе
     public void initInDB() {
-        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
             connector.CreateNode( this);
         }
@@ -20,7 +42,7 @@ public class Genre {
     }
 
     public void deleteFromDB() {
-        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
             connector.DeleteNode(this);
         }
@@ -31,7 +53,7 @@ public class Genre {
 
     //Найти фильмы данного жанра
     public void findMovies() {
-        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
             connector.FindNode( this, "isGenre", true);
         }
@@ -42,7 +64,7 @@ public class Genre {
 
     //Найти юзеров, которым нравится жанр
     public void findLikers() {
-        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
             connector.FindNode( this, "likes", false);
         }

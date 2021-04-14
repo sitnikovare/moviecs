@@ -1,4 +1,5 @@
 import com.sun.tools.internal.xjc.model.SymbolSpace;
+import org.neo4j.cypher.internal.v3_5.expressions.Null;
 import org.neo4j.driver.*;
 
 
@@ -10,7 +11,8 @@ import org.neo4j.driver.AuthTokens;
         import org.neo4j.driver.Transaction;
         import org.neo4j.driver.TransactionWork;
 
-        import static org.neo4j.driver.Values.parameters;
+import static org.neo4j.driver.Values.NULL;
+import static org.neo4j.driver.Values.parameters;
 
 public class Connector implements AutoCloseable {
     private final Driver driver;
@@ -56,7 +58,7 @@ public class Connector implements AutoCloseable {
                     String name = person.getName();
 
                     Result result = tx.run( "CREATE (a:" + role +
-                                    "{name: $name} ) " +
+                                    "{name: $name, rate: '0'}) " +
                                     "RETURN a.name + ', from node ' + id(a)",
                             parameters( "name", name) );
                     return result.single().get( 0 ).asString();
@@ -78,7 +80,7 @@ public class Connector implements AutoCloseable {
                 {
                     String mname = movie.getName();
 
-                    Result result = tx.run( "CREATE (a:Movie {name: $mname} ) " +
+                    Result result = tx.run( "CREATE (a:Movie {name: $mname, rate: '0'} ) " +
                                     "RETURN a.name + ', from node ' + id(a)",
                             parameters( "mname", mname) );
                     return result.single().get( 0 ).asString();
@@ -100,7 +102,7 @@ public class Connector implements AutoCloseable {
                 {
                     String gname = genre.getName();
 
-                    Result result = tx.run( "CREATE (a:Genre {name: $gname} ) " +
+                    Result result = tx.run( "CREATE (a:Genre {name: $gname, rate: '0'} ) " +
                                     "RETURN a.name + ', from node ' + id(a)",
                             parameters( "gname", gname) );
                     return result.single().get( 0 ).asString();
@@ -122,7 +124,7 @@ public class Connector implements AutoCloseable {
                 {
                     String dyear = date.getYear();
 
-                    Result result = tx.run( "CREATE (a:Date {year: $dyear} ) " +
+                    Result result = tx.run( "CREATE (a:Date {year: $dyear, rate: '0'} ) " +
                                     "RETURN a.year + ', from node ' + id(a)",
                             parameters( "dyear", dyear) );
                     return result.single().get( 0 ).asString();
@@ -714,5 +716,105 @@ public class Connector implements AutoCloseable {
             System.out.println(ex);
         }
         return resId[0];
+    }
+
+    //Получение рейтинга узла
+    public String getRating(final String nodeName, boolean isActor, boolean isDirector,
+                            boolean isMovie, boolean isGenre) {
+        String res = "";
+
+        String rolef = "";
+        if (isActor) rolef = "Actor";
+        else if (isDirector) rolef = "Director";
+        else if (isMovie) rolef = "Movie";
+        else if (isGenre) rolef = "Genre";
+        final String role = rolef;
+
+        try ( Session session = driver.session() ) {
+            String query = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+
+                    Result result = tx.run( "MATCH (m:$role {name: '$nodeName'}) RETURN m.rate",
+                            parameters("role", role, "nodeName", nodeName) );
+                    return result.single().get( 0 ).asString();
+                }
+            } );
+            System.out.println( query );
+            res = query;
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+
+        return res;
+    }
+
+    public void setRate(String role, String nodeName, String recalc) {
+        System.out.println("in SETRATE, query: " + "MATCH (m:"+role+" {name: '"+nodeName+"'}) SET m.rate = '"+recalc+"'");
+        try ( Session session = driver.session() ) {
+            String query = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+
+                    Result result = tx.run( "MATCH (m:"+role+" {name: '"+nodeName+"'}) SET m.rate = '"+recalc+"'",
+                            parameters("role", role, "nodeName", nodeName, "recalc", recalc ) );
+                    System.out.println(result);
+                    return result.single().get( 0 ).asString();
+                }
+            } );
+            System.out.println( query );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    //Пересчет рейтинга узла
+    public String recalculateRating(final String nodeName, boolean isActor, boolean isDirector,
+                                  boolean isMovie, boolean isGenre) {
+        Integer[] numbersUserLikes = new Integer[2];
+
+        //СДЕЛАНО найти количество пользователей - MATCH (n:User) return count(n)
+        //СДЕЛАНО найти количество лайков - MATCH (n)-[r:likes]->(m:Director {name: 'testDir'})  return count(r)
+        //СДЕЛАНО пересчитать рейтинг
+        //СДЕЛАНО переприсвоить рейтинг - SET
+
+        String rolef = "";
+        if (isActor) rolef = "Actor";
+        else if (isDirector) rolef = "Director";
+        else if (isMovie) rolef = "Movie";
+        else if (isGenre) rolef = "Genre";
+        final String role = rolef;
+
+        try ( Session session = driver.session() ) {
+            String query = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    Result resultUsers = tx.run( "MATCH (n:User) return count(n)",
+                            parameters( ) );
+                    numbersUserLikes[0] = resultUsers.single().get( 0 ).asInt();
+                    Result resultLikes = tx.run( "MATCH (n)-[r:likes]->(m:"+role+" {name: $nodeName})  return count(r)",
+                            parameters("role", role, "nodeName", nodeName ) );
+                    numbersUserLikes[1] = resultLikes.single().get( 0 ).asInt();
+                    return "0";
+                }
+            } );
+            System.out.println( query );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+
+        String recalc = Double.toString(Double.valueOf(numbersUserLikes[1]) / Double.valueOf(numbersUserLikes[0]));
+
+        System.out.println(role + " " + nodeName + " " + recalc);
+        System.out.println("MATCH (m:"+role+" {name: '"+nodeName+"'}) SET m.rate = '"+recalc+"'");
+
+        //setRate(role, nodeName, recalc);
+        return recalc;
     }
 }

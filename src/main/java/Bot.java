@@ -106,7 +106,7 @@ public class Bot extends TelegramLongPollingBot {
             }
         }
         else if (update.getMessage().getText().equals("Нравится")) {
-            if (fndMovie) { user.likes(movie, true); fndMovie = false;}
+            if (fndMovie) { user.likes(movie, true); fndMovie = false; }
             else if (fndActor) { user.likes(actor, true); fndActor = false;}
             else if (fndGenre) { user.likes(genre, true); fndGenre = false;}
             else if (fndDirector) { user.likes(director, true); fndDirector = false;}
@@ -115,6 +115,7 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
                 sendMessage.setText("Изменения сохранены.");
                 execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true));
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
@@ -130,6 +131,7 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage.setText("Изменения сохранены.");
                 execute(sendMessage);
                 execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true));
+
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
@@ -144,11 +146,49 @@ public class Bot extends TelegramLongPollingBot {
         else {
             if (fndMovie) {
                 movie = new Movie(update.getMessage().getText());
-                //тут по идее поиск по базе, чтобы связь поставить
+                sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+                sendMessage.setText("Ваш выброр: фильм\n" + movie.getName() + " \nРейтинг: " + movie.getRate());
+                try {
+                    execute(sendMessage);
+                    execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false));
+                    return;
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
             }
-            else if (fndActor) {actor = new Actor(update.getMessage().getText());}
-            else if (fndGenre) {genre = new Genre(update.getMessage().getText());}
-            else if (fndDirector) {director = new Director(update.getMessage().getText());}
+            else if (fndActor) {actor = new Actor(update.getMessage().getText());
+                sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+                sendMessage.setText("Ваш выброр: актер\n" + actor.getName() + " \nРейтинг: " + actor.getRate());
+                try {
+                    execute(sendMessage);
+                    execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false));
+                    return;
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if (fndGenre) {genre = new Genre(update.getMessage().getText());
+                sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+                sendMessage.setText("Ваш выброр: жанр\n" + genre.getName() + " \nРейтинг: " + genre.getRate());
+                try {
+                    execute(sendMessage);
+                    execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false));
+                    return;
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if (fndDirector) {director = new Director(update.getMessage().getText());
+                sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+                sendMessage.setText("Ваш выброр: режиссер\n" + director.getName() + " \nРейтинг: " + director.getRate());
+                try {
+                    execute(sendMessage);
+                    execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false));
+                    return;
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            }
             else {
                 sendMessage.setText("ничего не понимаю:(");
                 sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));

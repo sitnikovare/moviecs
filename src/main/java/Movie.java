@@ -1,7 +1,18 @@
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
+
+
 public class Movie {
     private String name;
+    private String rate = "0";
 
-    public Movie() {};
+    private Document document;
+
+    public Movie() { };
 
     public Movie(String t) {
         name = t;
@@ -10,10 +21,28 @@ public class Movie {
     public String getName() {
         return name;
     }
+    public String getRate() {
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        {
+            String rate = connector.recalculateRating(this.name, false, false, true, false);
+            Double drate = Double.valueOf(rate);
+            rate = String.format("%.3f", drate);
+            setRate(rate);
+        }
+        catch (Exception ex) {
+            System.out.println(ex);
+        }
+
+        return rate;
+    }
+    public void setRate(String r) {
+        rate = r;
+    }
+
 
     //Создание узла Movie в базе
     public void initInDB() {
-        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
             connector.CreateNode( this);
         }
@@ -24,7 +53,7 @@ public class Movie {
 
 
     public void deleteFromDB() {
-        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
             connector.DeleteNode(this);
         }
@@ -35,7 +64,7 @@ public class Movie {
 
     //Установка режиссера
     public void DirectedBy(Person person, boolean orNot) {
-        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
             if (orNot)
                 connector.CreateRelation( this, person, "directedBy" );
@@ -49,7 +78,7 @@ public class Movie {
 
     //Установка жанра
     public void isGenre(Genre genre, boolean orNot) {
-        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
             if (orNot)
                 connector.CreateRelation( this, genre, "isGenre" );
@@ -63,7 +92,7 @@ public class Movie {
 
     //Выпущен в прокат
     public void releasedIn(Date date, boolean orNot) {
-        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
             if (orNot)
                 connector.CreateRelation( this, date, "releasedIn" );
@@ -76,7 +105,7 @@ public class Movie {
     }
 
     public void findDirector() {
-        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
             connector.FindNode(this, "directedBy", false, false);
         }
@@ -86,7 +115,7 @@ public class Movie {
     }
 
     public void findActor() {
-        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
             connector.FindNode(this, "playsIn", false, false);
         }
@@ -96,7 +125,7 @@ public class Movie {
     }
 
     public void findLikers() {
-        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
             connector.FindNode(this, "likes", false, false);
         }
@@ -106,7 +135,7 @@ public class Movie {
     }
 
     public void findDate() {
-        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
             connector.FindNode(this, "releasedIn", true, false);
         }
@@ -116,7 +145,7 @@ public class Movie {
     }
 
     public void findGenre() {
-        try ( Connector connector = new Connector( "bolt://localhost:11008", "neo4j", "root" ) )
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
             connector.FindNode(this, "isGenre", false, true);
         }
