@@ -151,6 +151,7 @@ public class Bot extends TelegramLongPollingBot {
                 try {
                     execute(sendMessage);
                     execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false));
+                    //fndMovie = false;
                     return;
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
@@ -162,6 +163,7 @@ public class Bot extends TelegramLongPollingBot {
                 try {
                     execute(sendMessage);
                     execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false));
+                    //fndActor = false;
                     return;
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
@@ -173,6 +175,7 @@ public class Bot extends TelegramLongPollingBot {
                 try {
                     execute(sendMessage);
                     execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false));
+                    //fndGenre = false;
                     return;
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
@@ -184,6 +187,7 @@ public class Bot extends TelegramLongPollingBot {
                 try {
                     execute(sendMessage);
                     execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false));
+                    //fndDirector = false;
                     return;
                 } catch (TelegramApiException e) {
                     e.printStackTrace();

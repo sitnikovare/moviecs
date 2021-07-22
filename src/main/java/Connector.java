@@ -777,11 +777,6 @@ public class Connector implements AutoCloseable {
                                   boolean isMovie, boolean isGenre) {
         Integer[] numbersUserLikes = new Integer[2];
 
-        //СДЕЛАНО найти количество пользователей - MATCH (n:User) return count(n)
-        //СДЕЛАНО найти количество лайков - MATCH (n)-[r:likes]->(m:Director {name: 'testDir'})  return count(r)
-        //СДЕЛАНО пересчитать рейтинг
-        //СДЕЛАНО переприсвоить рейтинг - SET
-
         String rolef = "";
         if (isActor) rolef = "Actor";
         else if (isDirector) rolef = "Director";
