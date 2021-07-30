@@ -11,6 +11,8 @@ import org.neo4j.driver.AuthTokens;
         import org.neo4j.driver.Transaction;
         import org.neo4j.driver.TransactionWork;
 
+import java.util.List;
+
 import static org.neo4j.driver.Values.NULL;
 import static org.neo4j.driver.Values.parameters;
 
@@ -762,7 +764,7 @@ public class Connector implements AutoCloseable {
                     Result result = tx.run( "MATCH (m:"+role+" {name: '"+nodeName+"'}) SET m.rate = '"+recalc+"'",
                             parameters("role", role, "nodeName", nodeName, "recalc", recalc ) );
                     System.out.println(result);
-                    return result.single().get( 0 ).asString();
+                    return "SET IS DONE";
                 }
             } );
             System.out.println( query );
@@ -804,12 +806,96 @@ public class Connector implements AutoCloseable {
             System.out.println(ex);
         }
 
-        String recalc = Double.toString(Double.valueOf(numbersUserLikes[1]) / Double.valueOf(numbersUserLikes[0]));
+        Double rec = Double.valueOf(numbersUserLikes[1]) / Double.valueOf(numbersUserLikes[0]);
+        String recalc = String.format("%.2f", rec);
 
         System.out.println(role + " " + nodeName + " " + recalc);
         System.out.println("MATCH (m:"+role+" {name: '"+nodeName+"'}) SET m.rate = '"+recalc+"'");
 
-        //setRate(role, nodeName, recalc);
+        setRate(role, nodeName, recalc);
         return recalc;
+    }
+
+    public String[][] topMovies() {
+        String[][] arrayResult = null;
+        try ( Session session = driver.session() ) {
+            Result myResult = session.run("MATCH (n:Movie) RETURN n.name, n.rate ORDER BY n.rate DESC LIMIT 10");
+
+            List<Record> myRecords = myResult.list();
+            int i = 0;
+            arrayResult = new String[myRecords.size()][3];
+            for( Record record: myRecords){
+                arrayResult[i][0] = record.get("n.name").asString();
+                arrayResult[i][1] = record.get("n.rate").asString();
+                i++;
+            }
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+
+        return arrayResult;
+    }
+
+    public String[][] topActors() {
+        String[][] arrayResult = null;
+        try ( Session session = driver.session() ) {
+            Result myResult = session.run("MATCH (n:Actor) RETURN n.name, n.rate ORDER BY n.rate DESC LIMIT 10");
+
+            List<Record> myRecords = myResult.list();
+            int i = 0;
+            arrayResult = new String[myRecords.size()][3];
+            for( Record record: myRecords){
+                arrayResult[i][0] = record.get("n.name").asString();
+                arrayResult[i][1] = record.get("n.rate").asString();
+                i++;
+            }
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+
+        return arrayResult;
+    }
+    public String[][] topDirectors() {
+        String[][] arrayResult = null;
+        try ( Session session = driver.session() ) {
+            Result myResult = session.run("MATCH (n:Director) RETURN n.name, n.rate ORDER BY n.rate DESC LIMIT 10");
+
+            List<Record> myRecords = myResult.list();
+            int i = 0;
+            arrayResult = new String[myRecords.size()][3];
+            for( Record record: myRecords){
+                arrayResult[i][0] = record.get("n.name").asString();
+                arrayResult[i][1] = record.get("n.rate").asString();
+                i++;
+            }
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+
+        return arrayResult;
+    }
+
+    public String[][] topGenres() {
+        String[][] arrayResult = null;
+        try ( Session session = driver.session() ) {
+            Result myResult = session.run("MATCH (n:Genre) RETURN n.name, n.rate ORDER BY n.rate DESC LIMIT 10");
+
+            List<Record> myRecords = myResult.list();
+            int i = 0;
+            arrayResult = new String[myRecords.size()][3];
+            for( Record record: myRecords){
+                arrayResult[i][0] = record.get("n.name").asString();
+                arrayResult[i][1] = record.get("n.rate").asString();
+                i++;
+            }
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+
+        return arrayResult;
     }
 }

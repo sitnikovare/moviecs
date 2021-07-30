@@ -45,14 +45,14 @@ public class Bot extends TelegramLongPollingBot {
 
             try {
                 execute(sendMessage);
-                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true));
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false));
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
         } else if (update.getMessage().getText().equals("testR")) {
 
             try {
-                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true));
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false));
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
@@ -115,7 +115,7 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
                 sendMessage.setText("Изменения сохранены.");
                 execute(sendMessage);
-                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true));
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false));
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
@@ -130,7 +130,7 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
                 sendMessage.setText("Изменения сохранены.");
                 execute(sendMessage);
-                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true));
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false));
 
             } catch (TelegramApiException e) {
                 e.printStackTrace();
@@ -138,7 +138,62 @@ public class Bot extends TelegramLongPollingBot {
         }
         else if (update.getMessage().getText().equals("Искать дальше")) {
             try {
-                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true));
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().equals("Рейтинг")) {
+            try {
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, true));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().equals("Фильмы")) {
+            Database db = new Database();
+            String msg = db.getTop("movies");
+            sendMessage.setText("Топ-10 фильмов:\n" + msg);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+
+            try {
+                execute(sendMessage);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().equals("Актеры")) {
+            Database db = new Database();
+            String msg = db.getTop("actors");
+            sendMessage.setText("Топ-10 актеров:\n" + msg);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+
+            try {
+                execute(sendMessage);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().equals("Режиссеры")) {
+            Database db = new Database();
+            String msg = db.getTop("directors");
+            sendMessage.setText("Топ-10 режиссеров:\n" + msg);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+
+            try {
+                execute(sendMessage);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().equals("Жанры")) {
+            Database db = new Database();
+            String msg = db.getTop("genres");
+            sendMessage.setText("Топ-10 жанров:\n" + msg);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+
+            try {
+                execute(sendMessage);
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
@@ -150,7 +205,7 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage.setText("Ваш выброр: фильм\n" + movie.getName() + " \nРейтинг: " + movie.getRate());
                 try {
                     execute(sendMessage);
-                    execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false));
+                    execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, false));
                     //fndMovie = false;
                     return;
                 } catch (TelegramApiException e) {
@@ -162,7 +217,7 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage.setText("Ваш выброр: актер\n" + actor.getName() + " \nРейтинг: " + actor.getRate());
                 try {
                     execute(sendMessage);
-                    execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false));
+                    execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, false));
                     //fndActor = false;
                     return;
                 } catch (TelegramApiException e) {
@@ -174,7 +229,7 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage.setText("Ваш выброр: жанр\n" + genre.getName() + " \nРейтинг: " + genre.getRate());
                 try {
                     execute(sendMessage);
-                    execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false));
+                    execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, false));
                     //fndGenre = false;
                     return;
                 } catch (TelegramApiException e) {
@@ -186,7 +241,7 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage.setText("Ваш выброр: режиссер\n" + director.getName() + " \nРейтинг: " + director.getRate());
                 try {
                     execute(sendMessage);
-                    execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false));
+                    execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, false));
                     //fndDirector = false;
                     return;
                 } catch (TelegramApiException e) {
@@ -205,7 +260,7 @@ public class Bot extends TelegramLongPollingBot {
             }
 
             try {
-                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false));
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, false));
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
@@ -223,7 +278,7 @@ public class Bot extends TelegramLongPollingBot {
         return "1683477750:AAERfI0w4BQHjyuZRTCP882-OeSqbUw2e_0";
     }
 
-    public static SendMessage sendReplyKeyBoardMessage(long chatId, boolean fnd) {
+    public static SendMessage sendReplyKeyBoardMessage(long chatId, boolean fnd, boolean rt) {
         SendMessage sm = new SendMessage();
 
         ArrayList<KeyboardRow> keyboard = new ArrayList<>();
@@ -245,8 +300,19 @@ public class Bot extends TelegramLongPollingBot {
             line1.add("Жанр");
             line2.add("Актер");
             line2.add("Режиссер");
+            line2.add("Рейтинг");
             sm.setText("Что хотите найти?");
-        } else {
+        }
+        else if(rt) {
+            line1.add("Фильмы");
+            line1.add("Жанры");
+            line2.add("Актеры");
+            line2.add("Режиссеры");
+            line2.add("Искать дальше");
+            sm.setText("По какому направлению вы хотите узнать рейтинг?");
+
+        }
+        else {
             line1.add("Нравится");
             line1.add("Не нравится");
             line2.add("Искать дальше");

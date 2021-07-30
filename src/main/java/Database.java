@@ -56,6 +56,7 @@ public class Database {
     Genre gen7 = new Genre("Вестерн");
     Genre gen8 = new Genre("Фантастика");
     Genre gen9 = new Genre("Боевик");
+    Genre gen10 = new Genre("Нуар");
 
     public Database() {};
 
@@ -195,6 +196,7 @@ public class Database {
         gen7.initInDB();
         gen8.initInDB();
         gen9.initInDB();
+        gen10.initInDB();
     }
 
     public void createRel_PlaysIn() {
@@ -253,7 +255,92 @@ public class Database {
         mov12.isGenre(gen1, true);
         mov12.isGenre(gen6, true);
     }
+
+public void updateRate() {
+    try (Connector connector = new Connector("bolt://localhost:7687", "neo4j", "root")) {
+        connector.recalculateRating(mov1.getName(), false, false, true, false);
+        connector.recalculateRating(mov2.getName(), false, false, true, false);
+        connector.recalculateRating(mov3.getName(), false, false, true, false);
+        connector.recalculateRating(mov4.getName(), false, false, true, false);
+        connector.recalculateRating(mov5.getName(), false, false, true, false);
+        connector.recalculateRating(mov6.getName(), false, false, true, false);
+        connector.recalculateRating(mov7.getName(), false, false, true, false);
+        connector.recalculateRating(mov8.getName(), false, false, true, false);
+        connector.recalculateRating(mov9.getName(), false, false, true, false);
+        connector.recalculateRating(mov10.getName(), false, false, true, false);
+        connector.recalculateRating(mov11.getName(), false, false, true, false);
+        connector.recalculateRating(mov12.getName(), false, false, true, false);
+
+        connector.recalculateRating(act1.getName(), true, false, false, false);
+        connector.recalculateRating(act2.getName(), true, false, false, false);
+        connector.recalculateRating(act3.getName(), true, false, false, false);
+        connector.recalculateRating(act4.getName(), true, false, false, false);
+        connector.recalculateRating(act5.getName(), true, false, false, false);
+        connector.recalculateRating(act6.getName(), true, false, false, false);
+        connector.recalculateRating(act7.getName(), true, false, false, false);
+        connector.recalculateRating(act8.getName(), true, false, false, false);
+        connector.recalculateRating(act9.getName(), true, false, false, false);
+        connector.recalculateRating(act10.getName(), true, false, false, false);
+        connector.recalculateRating(act11.getName(), true, false, false, false);
+        connector.recalculateRating(act12.getName(), true, false, false, false);
+        connector.recalculateRating(act13.getName(), true, false, false, false);
+        connector.recalculateRating(act14.getName(), true, false, false, false);
+        connector.recalculateRating(act15.getName(), true, false, false, false);
+
+        connector.recalculateRating(dir1.getName(), false, true, false, false);
+        connector.recalculateRating(dir2.getName(), false, true, false, false);
+        connector.recalculateRating(dir3.getName(), false, true, false, false);
+        connector.recalculateRating(dir4.getName(), false, true, false, false);
+        connector.recalculateRating(dir5.getName(), false, true, false, false);
+        connector.recalculateRating(dir6.getName(), false, true, false, false);
+        connector.recalculateRating(dir7.getName(), false, true, false, false);
+        connector.recalculateRating(dir8.getName(), false, true, false, false);
+        connector.recalculateRating(dir9.getName(), false, true, false, false);
+        connector.recalculateRating(dir10.getName(), false, true, false, false);
+        connector.recalculateRating(dir11.getName(), false, true, false, false);
+        connector.recalculateRating(dir12.getName(), false, true, false, false);
+        connector.recalculateRating(dir13.getName(), false, true, false, false);
+        connector.recalculateRating(dir14.getName(), false, true, false, false);
+        connector.recalculateRating(dir15.getName(), false, true, false, false);
+        connector.recalculateRating(dir16.getName(), false, true, false, false);
+
+        connector.recalculateRating(gen1.getName(), false, false, false, true);
+        connector.recalculateRating(gen2.getName(), false, false, false, true);
+        connector.recalculateRating(gen3.getName(), false, false, false, true);
+        connector.recalculateRating(gen4.getName(), false, false, false, true);
+        connector.recalculateRating(gen5.getName(), false, false, false, true);
+        connector.recalculateRating(gen6.getName(), false, false, false, true);
+        connector.recalculateRating(gen7.getName(), false, false, false, true);
+        connector.recalculateRating(gen8.getName(), false, false, false, true);
+        connector.recalculateRating(gen9.getName(), false, false, false, true);
+        connector.recalculateRating(gen10.getName(), false, false, false, true);
+    } catch (Exception ex) {
+        System.out.println(ex);
+    }
 }
+
+public String getTop(String knd) {
+        String res = new String();
+
+    try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+    {
+        String[][] result = null;
+        if (knd == "movies") {result = connector.topMovies();}
+        else if (knd == "genres") {result = connector.topGenres();}
+        else if (knd == "actors") {result = connector.topActors();}
+        else if (knd == "directors") {result = connector.topDirectors();}
+
+        for (int i = 0; i < 10; i++) {
+            res += (i+1) + ". " + result[i][0] + " " + result[i][1] + "\n";
+        }
+    }
+    catch (Exception ex) {
+        System.out.println(ex);
+    }
+        return res;
+}
+}
+
 
 //movie.initInDB();
 

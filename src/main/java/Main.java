@@ -7,9 +7,10 @@ public class Main {
     public static void main( String... args ) throws Exception
     {
 
-        Database moviecsDB = new Database();
+        //Database moviecsDB = new Database();
         //moviecsDB.initDatabase();
         //moviecsDB.createUsersRel();
+        //moviecsDB.updateRate();
 
 
        TelegramBotsApi telegram = new TelegramBotsApi(DefaultBotSession.class);
@@ -19,7 +20,6 @@ public class Main {
        } catch (TelegramApiRequestException e) {
            e.printStackTrace();
        }
-
 
     }
 }
