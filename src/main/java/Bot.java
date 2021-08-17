@@ -45,14 +45,17 @@ public class Bot extends TelegramLongPollingBot {
 
             try {
                 execute(sendMessage);
-                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false));
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
-        } else if (update.getMessage().getText().equals("testR")) {
+        }
+        else if (update.getMessage().getText().equals("Поиск")) {
+            sendMessage.setText("ПЕРЕХОД НА КЛАВИАТУРУ ПОИСКА");
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
 
             try {
-                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false));
+                execute(sendMessage);
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
@@ -115,7 +118,7 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
                 sendMessage.setText("Изменения сохранены.");
                 execute(sendMessage);
-                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false));
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
@@ -130,22 +133,22 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
                 sendMessage.setText("Изменения сохранены.");
                 execute(sendMessage);
-                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false));
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
 
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
         }
-        else if (update.getMessage().getText().equals("Искать дальше")) {
+        else if (update.getMessage().getText().equals("Гл.меню")) {
             try {
-                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false));
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
         }
         else if (update.getMessage().getText().equals("Рейтинг")) {
             try {
-                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, true));
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, false, true, false));
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
@@ -198,6 +201,46 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
+        else if (update.getMessage().getText().equals("Фильмы по жанрам")) {
+            sendMessage.setText("ТУТ ДОЛЖНЫ БЫТЬ ТОПЫ ПО ЖАНРАМ");
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+
+            try {
+                execute(sendMessage);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().equals("Получить рекомендацию")) {
+            sendMessage.setText("ТУТ ДОЛЖНА БЫТЬ КЛАВИАТУРА ДЛЯ РЕКОМЕНДАЦИЙ");
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+
+            try {
+                execute(sendMessage);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().equals("Случ.фильм")) {
+            sendMessage.setText("Тут должны быть топы по жанрам");
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+
+            try {
+                execute(sendMessage);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().equals("Перс.фильм")) {
+            sendMessage.setText("Тут должны быть топы по жанрам");
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+
+            try {
+                execute(sendMessage);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
         else {
             if (fndMovie) {
                 movie = new Movie(update.getMessage().getText());
@@ -205,7 +248,7 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage.setText("Ваш выброр: фильм\n" + movie.getName() + " \nРейтинг: " + movie.getRate());
                 try {
                     execute(sendMessage);
-                    execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, false));
+                    execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, false, false, false));
                     //fndMovie = false;
                     return;
                 } catch (TelegramApiException e) {
@@ -217,7 +260,7 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage.setText("Ваш выброр: актер\n" + actor.getName() + " \nРейтинг: " + actor.getRate());
                 try {
                     execute(sendMessage);
-                    execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, false));
+                    execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, false, false, false));
                     //fndActor = false;
                     return;
                 } catch (TelegramApiException e) {
@@ -229,7 +272,7 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage.setText("Ваш выброр: жанр\n" + genre.getName() + " \nРейтинг: " + genre.getRate());
                 try {
                     execute(sendMessage);
-                    execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, false));
+                    execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, false, false, false));
                     //fndGenre = false;
                     return;
                 } catch (TelegramApiException e) {
@@ -241,7 +284,7 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage.setText("Ваш выброр: режиссер\n" + director.getName() + " \nРейтинг: " + director.getRate());
                 try {
                     execute(sendMessage);
-                    execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, false));
+                    execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, false, false, false));
                     //fndDirector = false;
                     return;
                 } catch (TelegramApiException e) {
@@ -260,7 +303,7 @@ public class Bot extends TelegramLongPollingBot {
             }
 
             try {
-                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, false));
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, false, false, false));
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
@@ -278,7 +321,9 @@ public class Bot extends TelegramLongPollingBot {
         return "1683477750:AAERfI0w4BQHjyuZRTCP882-OeSqbUw2e_0";
     }
 
-    public static SendMessage sendReplyKeyBoardMessage(long chatId, boolean fnd, boolean rt) {
+    public static SendMessage sendReplyKeyBoardMessage(long chatId,
+                                                       boolean main, boolean search,
+                                                       boolean rate, boolean recommend) {
         SendMessage sm = new SendMessage();
 
         ArrayList<KeyboardRow> keyboard = new ArrayList<>();
@@ -295,27 +340,40 @@ public class Bot extends TelegramLongPollingBot {
         line1.clear();
         line2.clear();
 
-        if (fnd) {
+        if (main) {
+            line1.add("Поиск");
+            line1.add("Рейтинг");
+            line2.add("Получить рекомендацию");
+            sm.setText("Что хотите найти?");
+        }
+        else if (search) {
             line1.add("Фильм");
             line1.add("Жанр");
             line2.add("Актер");
             line2.add("Режиссер");
             line2.add("Рейтинг");
-            sm.setText("Что хотите найти?");
+            line2.add("Гл.меню");
+            sm.setText("В каком направлении осуществить поиск?");
         }
-        else if(rt) {
+        else if(rate) {
             line1.add("Фильмы");
             line1.add("Жанры");
+            line1.add("Фильмы по жанрам");
             line2.add("Актеры");
             line2.add("Режиссеры");
-            line2.add("Искать дальше");
+            line2.add("Гл.меню");
             sm.setText("По какому направлению вы хотите узнать рейтинг?");
-
+        }
+        else if(recommend) {
+            line1.add("Случ.фильм");
+            line1.add("Перс.фильм");
+            line2.add("Гл.меню");
+            sm.setText("Хотите получить название случайного фильма или персонализированную рекомендацию?");
         }
         else {
             line1.add("Нравится");
             line1.add("Не нравится");
-            line2.add("Искать дальше");
+            line2.add("Гл.меню");
             sm.setText("Нравится ли вам это?");
         }
 
@@ -325,80 +383,6 @@ public class Bot extends TelegramLongPollingBot {
 
         sm.setChatId(String.valueOf(chatId));
         sm.setReplyMarkup(replyKeyboardMarkup);
-        return sm;
-    }
-
-    public static SendMessage sendInlineKeyBoardMessage(long chatId, boolean fnd) {
-        SendMessage sm = new SendMessage();
-
-        if (fnd) {
-            InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-
-            InlineKeyboardButton ikbMovie = new InlineKeyboardButton();
-            InlineKeyboardButton ikbActor = new InlineKeyboardButton();
-            InlineKeyboardButton ikbDirector = new InlineKeyboardButton();
-            InlineKeyboardButton ikbGenre = new InlineKeyboardButton();
-
-            ikbMovie.setText("Фильм");
-            ikbMovie.setCallbackData("movie");
-            ikbActor.setText("Актер");
-            ikbActor.setCallbackData("actor");
-            ikbDirector.setText("Режиссер");
-            ikbDirector.setCallbackData("director");
-            ikbGenre.setText("Жанр");
-            ikbGenre.setCallbackData("genre");
-
-
-            //inlineKeyboardButton1.setText("Тык");
-            //inlineKeyboardButton1.setCallbackData("Button \"Тык\" has been pressed");
-
-            List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
-            List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<>();
-            List<InlineKeyboardButton> keyboardButtonsRow3 = new ArrayList<>();
-            List<InlineKeyboardButton> keyboardButtonsRow4 = new ArrayList<>();
-
-            keyboardButtonsRow1.add(ikbMovie);
-            keyboardButtonsRow2.add(ikbActor);
-            keyboardButtonsRow3.add(ikbDirector);
-            keyboardButtonsRow4.add(ikbGenre);
-
-            List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
-            rowList.add(keyboardButtonsRow1);
-            rowList.add(keyboardButtonsRow2);
-            rowList.add(keyboardButtonsRow3);
-            rowList.add(keyboardButtonsRow4);
-            inlineKeyboardMarkup.setKeyboard(rowList);
-
-            sm.setChatId(String.valueOf(chatId));
-            sm.setText("Что хотите найти?");
-            sm.setReplyMarkup(inlineKeyboardMarkup);
-        } else {
-            InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-
-            InlineKeyboardButton ikbLike = new InlineKeyboardButton();
-            InlineKeyboardButton ikbUnlike = new InlineKeyboardButton();
-
-            ikbLike.setText("Нравится");
-            ikbLike.setCallbackData("like");
-            ikbUnlike.setText("Не нравится");
-            ikbUnlike.setCallbackData("unlike");
-
-            List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
-            List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<>();
-
-            keyboardButtonsRow1.add(ikbLike);
-            keyboardButtonsRow2.add(ikbUnlike);
-
-            List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
-            rowList.add(keyboardButtonsRow1);
-            rowList.add(keyboardButtonsRow2);
-            inlineKeyboardMarkup.setKeyboard(rowList);
-
-            sm.setChatId(String.valueOf(chatId));
-            sm.setText("Нравится ли вам это?");
-            sm.setReplyMarkup(inlineKeyboardMarkup);
-        }
-
         return sm;
     }
 }
