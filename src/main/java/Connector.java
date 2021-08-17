@@ -885,7 +885,8 @@ public class Connector implements AutoCloseable {
 
             List<Record> myRecords = myResult.list();
             int i = 0;
-            arrayResult = new String[myRecords.size()][3];
+            //тут ниже было 3, а не 2
+            arrayResult = new String[myRecords.size()][2];
             for( Record record: myRecords){
                 arrayResult[i][0] = record.get("n.name").asString();
                 arrayResult[i][1] = record.get("n.rate").asString();
@@ -897,5 +898,73 @@ public class Connector implements AutoCloseable {
         }
 
         return arrayResult;
+    }
+
+    public String[]getAllGenres() {
+        String[] arrayResult = null;
+        try ( Session session = driver.session() ) {
+            Result myResult = session.run("MATCH (n:Genre) RETURN n.name LIMIT 100");
+
+            List<Record> myRecords = myResult.list();
+            int i = 0;
+            arrayResult = new String[myRecords.size()];
+            for( Record record: myRecords){
+                arrayResult[i] = record.get("n.name").asString();
+                i++;
+            }
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+
+        return arrayResult;
+    }
+
+    public String getMoviesByGenres() {
+        String result = "";
+
+        String[][] arrayResult = null;
+
+        String[] genres = getAllGenres();
+
+        for (int i = 0; i < genres.length; i++) {
+
+            try ( Session session = driver.session() ) {
+                Result myResult = session.run(
+                        "MATCH (n:Movie)-->(m:Genre {name:'"+ genres[i] + "'}) " +
+                                "RETURN n.name, n.rate ORDER BY n.rate DESC LIMIT 10");
+                System.out.println("MATCH (n:Movie)-->(m:Genre {name:' "+ genres[i] + "'}) " +
+                        "RETURN n.name, n.rate ORDER BY n.rate DESC LIMIT 10");
+
+                List<Record> myRecords = myResult.list();
+                int j = 0;
+                //тут ниже было 3, а не 2
+                //в данном случае 10 жанров и 10 фильмов в каждом
+                arrayResult = new String[100][2];
+                for( Record record: myRecords){
+                    arrayResult[j][0] = record.get("n.name").asString();
+                    arrayResult[j][1] = record.get("n.rate").asString();
+                    j++;
+                }
+
+                result+= "Жанр " + genres[i] + ":\n";
+                for (int k = 0; k < 10; k++) {
+                    if (arrayResult[0][0] == null) {
+                        result += "Ни один фильм данного жанра не получил отметку \"Нравится\" от пользователей.\n";
+                        break;
+                    }
+                    else if (arrayResult[k][0] == null) {
+                        break;
+                    };
+                    result += (k+1) + ". " + arrayResult[k][0] + " " + arrayResult[k][1] + "\n";
+                }
+            }
+            catch(Exception ex) {
+                System.out.println(ex);
+            }
+
+        }
+
+        return result;
     }
 }

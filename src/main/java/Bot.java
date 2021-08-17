@@ -28,6 +28,7 @@ public class Bot extends TelegramLongPollingBot {
     private boolean fndDate = false;
 
     @Override
+    //TODO: make a nice messages (bold font for example)
     public void onUpdateReceived(Update update) {
         update.getUpdateId();
         user = new User(String.valueOf(update.getMessage().getChatId()));
@@ -198,9 +199,10 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
-        //TODO: write a function to make top on genres
         else if (update.getMessage().getText().equals("Фильмы по жанрам")) {
-            sendMessage.setText("ТУТ ДОЛЖНЫ БЫТЬ ТОПЫ ПО ЖАНРАМ");
+            Database db = new Database();
+            String msg = db.getMoviesByGenres();
+            sendMessage.setText(msg);
             sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
 
             try {

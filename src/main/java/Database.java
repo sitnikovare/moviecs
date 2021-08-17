@@ -339,6 +339,21 @@ public String getTop(String knd) {
     }
         return res;
 }
+
+    public String getMoviesByGenres() {
+        String res = new String();
+
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        {
+            String result = connector.getMoviesByGenres();
+            res = result;
+
+        }
+        catch (Exception ex) {
+            System.out.println(ex);
+        }
+        return res;
+    }
 }
 
 
