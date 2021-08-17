@@ -51,11 +51,8 @@ public class Bot extends TelegramLongPollingBot {
             }
         }
         else if (update.getMessage().getText().equals("Поиск")) {
-            sendMessage.setText("ПЕРЕХОД НА КЛАВИАТУРУ ПОИСКА");
-            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
-
             try {
-                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, true, false, false));
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
@@ -201,6 +198,7 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
+        //TODO: write a function to make top on genres
         else if (update.getMessage().getText().equals("Фильмы по жанрам")) {
             sendMessage.setText("ТУТ ДОЛЖНЫ БЫТЬ ТОПЫ ПО ЖАНРАМ");
             sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
@@ -212,17 +210,15 @@ public class Bot extends TelegramLongPollingBot {
             }
         }
         else if (update.getMessage().getText().equals("Получить рекомендацию")) {
-            sendMessage.setText("ТУТ ДОЛЖНА БЫТЬ КЛАВИАТУРА ДЛЯ РЕКОМЕНДАЦИЙ");
-            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
-
             try {
-                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, false, false, true));
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
         }
+        //TODO: write a function to recommend a random film
         else if (update.getMessage().getText().equals("Случ.фильм")) {
-            sendMessage.setText("Тут должны быть топы по жанрам");
+            sendMessage.setText("ТУТ ДОЛЖНА БЫТЬ РЕКОМЕНДАЦИЯ СЛУЧАЙНОГО ФИЛЬМА");
             sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
 
             try {
@@ -231,8 +227,9 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
+        //TODO: write a function to recommend a personalized film
         else if (update.getMessage().getText().equals("Перс.фильм")) {
-            sendMessage.setText("Тут должны быть топы по жанрам");
+            sendMessage.setText("ТУТ ДОЛЖНА БЫТЬ РЕКОМЕНДАЦИЯ ПЕРСОНАЛИЗИРОВАННОГО ФИЛЬМА");
             sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
 
             try {
@@ -351,7 +348,6 @@ public class Bot extends TelegramLongPollingBot {
             line1.add("Жанр");
             line2.add("Актер");
             line2.add("Режиссер");
-            line2.add("Рейтинг");
             line2.add("Гл.меню");
             sm.setText("В каком направлении осуществить поиск?");
         }
