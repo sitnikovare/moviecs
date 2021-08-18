@@ -1,51 +1,50 @@
 public class Database {
 
-    Movie mov1 = new Movie("Форрест Гамп");
-    Movie mov2 = new Movie("Назад в будущее");
-    Movie mov3 = new Movie("Крестный отец");
-    Movie mov4 = new Movie("Волк с Уолл-стрит");
-    Movie mov5 = new Movie("День сурка");
-    Movie mov6 = new Movie("Братство кольца");
-    Movie mov7 = new Movie("Линкольн для адвоката");
-    Movie mov8 = new Movie("Рокки");
-    Movie mov9 = new Movie("Матрица");
-    Movie mov10 = new Movie("Леон");
-    Movie mov11 = new Movie("Васаби");
-    Movie mov12 = new Movie("Убить Билла");
-    Movie mov13 = new Movie("Пятый элемент");
+    Movie mov1 = new Movie("Форрест Гамп"); //1994
+    Movie mov2 = new Movie("Назад в будущее"); //1985
+    Movie mov3 = new Movie("Крестный отец"); //1972
+    Movie mov4 = new Movie("Волк с Уолл-стрит"); //2013
+    Movie mov5 = new Movie("День сурка"); //1993
+    Movie mov6 = new Movie("Братство кольца"); //2001
+    Movie mov7 = new Movie("Линкольн для адвоката"); //2011
+    Movie mov8 = new Movie("Рокки"); //1976
+    Movie mov9 = new Movie("Матрица"); //1999
+    Movie mov10 = new Movie("Леон"); //1994
+    Movie mov11 = new Movie("Васаби"); //2001
+    Movie mov12 = new Movie("Убить Билла"); //2003
+    Movie mov13 = new Movie("Пятый элемент"); //1997
 
-    Actor act1 = new Actor("Жан Рено");
-    Actor act2 = new Actor("Билл Мюррей");
-    Actor act3 = new Actor("Аль Пачино");
-    Actor act4 = new Actor("Мэттью Макконехи");
-    Actor act5 = new Actor("Уильям Мэйси");
-    Actor act6 = new Actor("Сами Насери");
-    Actor act7 = new Actor("Винни Джонс");
-    Actor act8 = new Actor("Джейсон Стейтем");
-    Actor act9 = new Actor("Кристофер Ллойд");
-    Actor act10 = new Actor("Майкл Джей Фокс");
-    Actor act11 = new Actor("Киану Ривз");
-    Actor act12 = new Actor("Ума Турман");
-    Actor act13 = new Actor("Натали Портман");
-    Actor act14 = new Actor("Вайнона Райдер");
-    Actor act15 = new Actor("Брюс Уиллис");
+    Actor act1 = new Actor("Жан Рено"); //1948
+    Actor act2 = new Actor("Билл Мюррей"); //1950
+    Actor act3 = new Actor("Аль Пачино"); //1940
+    Actor act4 = new Actor("Мэттью Макконехи"); //1969
+    Actor act5 = new Actor("Уильям Мэйси"); //1950
+    Actor act6 = new Actor("Сами Насери"); //1961
+    Actor act7 = new Actor("Винни Джонс"); //1965
+    Actor act8 = new Actor("Джейсон Стейтем"); //1967
+    Actor act9 = new Actor("Кристофер Ллойд"); //1938
+    Actor act10 = new Actor("Майкл Джей Фокс"); //1961
+    Actor act11 = new Actor("Киану Ривз"); //1964
+    Actor act12 = new Actor("Ума Турман"); //1970
+    Actor act13 = new Actor("Натали Портман"); //1981
+    Actor act14 = new Actor("Вайнона Райдер"); //1971
+    Actor act15 = new Actor("Брюс Уиллис"); //1955
 
-    Director dir1 = new Director("Люк Бессон");
-    Director dir2 = new Director("Сестры Вачовски");
-    Director dir3 = new Director("Роберт Земекис");
-    Director dir4 = new Director("Квентин Тарантино");
-    Director dir5 = new Director("Джеймс Кемерон");
-    Director dir6 = new Director("Стивен Спилберг");
-    Director dir7 = new Director("Гай Ричи");
-    Director dir8 = new Director("Кристофер Нолан");
-    Director dir9 = new Director("Гароль Рамис");
-    Director dir10 = new Director("Жерар Кравчик");
-    Director dir11 = new Director("Девид Линч");
-    Director dir12 = new Director("Фрэнсис Форд Коппола");
-    Director dir13 = new Director("Мартин Скорсезе");
-    Director dir14 = new Director("Питер Джексон");
-    Director dir15 = new Director("Харольд Рэмис");
-    Director dir16 = new Director("Брэд Фурман");
+    Director dir1 = new Director("Люк Бессон"); //1959
+    Director dir2 = new Director("Сестры Вачовски"); //1965, 1967
+    Director dir3 = new Director("Роберт Земекис"); //1951
+    Director dir4 = new Director("Квентин Тарантино"); //1963
+    Director dir5 = new Director("Джеймс Кемерон"); //1954
+    Director dir6 = new Director("Стивен Спилберг"); //1946
+    Director dir7 = new Director("Гай Ричи"); //1968
+    Director dir8 = new Director("Кристофер Нолан"); //1970
+    Director dir9 = new Director("Гарольд Рамис"); //1944
+    Director dir10 = new Director("Жерар Кравчик"); //1953
+    Director dir11 = new Director("Дэвид Линч"); //1946
+    Director dir12 = new Director("Фрэнсис Форд Коппола"); //1939
+    Director dir13 = new Director("Мартин Скорсезе"); //1942
+    Director dir14 = new Director("Питер Джексон"); //1961
+    Director dir15 = new Director("Брэд Фурман"); //???
 
     Genre gen1 = new Genre("Триллер");
     Genre gen2 = new Genre("Детектив");
@@ -58,6 +57,42 @@ public class Database {
     Genre gen9 = new Genre("Боевик");
     Genre gen10 = new Genre("Нуар");
 
+    Date dt1994 = new Date("1994");
+    Date dt1985 = new Date("1985");
+    Date dt1975 = new Date("1975");
+    Date dt1993 = new Date("1993");
+    Date dt2013 = new Date("2013");
+    Date dt2001 = new Date("2001");
+    Date dt2011 = new Date("2011");
+    Date dt1976 = new Date("1976");
+    Date dt1999 = new Date("1999");
+    Date dt2003 = new Date("2003");
+    Date dt1997 = new Date("1997");
+    Date dt1948 = new Date("1948");
+    Date dt1950 = new Date("1950");
+    Date dt1940 = new Date("1940");
+    Date dt1969 = new Date("1969");
+    Date dt1961 = new Date("1961");
+    Date dt1965 = new Date("1965");
+    Date dt1967 = new Date("1967");
+    Date dt1938 = new Date("1938");
+    Date dt1964 = new Date("1964");
+    Date dt1970 = new Date("1970");
+    Date dt1981 = new Date("1981");
+    Date dt1971 = new Date("1971");
+    Date dt1955 = new Date("1955");
+    Date dt1959 = new Date("1959");
+    Date dt1951 = new Date("1951");
+    Date dt1963 = new Date("1963");
+    Date dt1954 = new Date("1954");
+    Date dt1946 = new Date("1946");
+    Date dt1939 = new Date("1939");
+    Date dt1942 = new Date("1942");
+    Date dt1972 = new Date("1972");
+    Date dt1968 = new Date("1968");
+    Date dt1944 = new Date("1944");
+    Date dt1953 = new Date("1953");
+
     public Database() {};
 
     public void initDatabase() {
@@ -65,6 +100,8 @@ public class Database {
         createRel_directedBy();
         createRel_isGenre();
         createRel_PlaysIn();
+        createRel_bornIn();
+        createRel_releasedIn();
     }
 
     public void createUsersRel() {
@@ -105,7 +142,7 @@ public class Database {
         tS.likes(dir10, true);
         tS.likes(dir12, true);
         tS.likes(dir7, true);
-        tS.likes(dir16, true);
+        tS.likes(dir15, true);
 
         tS.likes(gen5, true);
         tS.likes(gen1, true);
@@ -185,7 +222,6 @@ public class Database {
         dir13.initInDB();
         dir14.initInDB();
         dir15.initInDB();
-        dir16.initInDB();
 
         gen1.initInDB();
         gen2.initInDB();
@@ -197,6 +233,42 @@ public class Database {
         gen8.initInDB();
         gen9.initInDB();
         gen10.initInDB();
+
+        dt1994.initInDB();
+        dt1985.initInDB();
+        dt1975.initInDB();
+        dt1993.initInDB();
+        dt2013.initInDB();
+        dt2001.initInDB();
+        dt2011.initInDB();
+        dt1976.initInDB();
+        dt1999.initInDB();
+        dt2003.initInDB();
+        dt1997.initInDB();
+        dt1948.initInDB();
+        dt1950.initInDB();
+        dt1940.initInDB();
+        dt1969.initInDB();
+        dt1961.initInDB();
+        dt1965.initInDB();
+        dt1967.initInDB();
+        dt1938.initInDB();
+        dt1964.initInDB();
+        dt1970.initInDB();
+        dt1981.initInDB();
+        dt1971.initInDB();
+        dt1955.initInDB();
+        dt1959.initInDB();
+        dt1951.initInDB();
+        dt1963.initInDB();
+        dt1954.initInDB();
+        dt1946.initInDB();
+        dt1939.initInDB();
+        dt1942.initInDB();
+        dt1972.initInDB();
+        dt1968.initInDB();
+        dt1944.initInDB();
+        dt1953.initInDB();
     }
 
     public void createRel_PlaysIn() {
@@ -219,7 +291,7 @@ public class Database {
         mov3.DirectedBy(dir12, true);
         mov4.DirectedBy(dir13, true);
         mov6.DirectedBy(dir14, true);
-        mov7.DirectedBy(dir16, true);
+        mov7.DirectedBy(dir15, true);
         mov9.DirectedBy(dir2, true);
         mov10.DirectedBy(dir1, true);
         mov11.DirectedBy(dir10, true);
@@ -256,7 +328,59 @@ public class Database {
         mov12.isGenre(gen6, true);
     }
 
-public void updateRate() {
+    public void createRel_bornIn() {
+        act1.bornIn(dt1948);
+        act2.bornIn(dt1950);
+        act3.bornIn(dt1940);
+        act4.bornIn(dt1969);
+        act5.bornIn(dt1950);
+        act6.bornIn(dt1961);
+        act7.bornIn(dt1965);
+        act8.bornIn(dt1967);
+        act9.bornIn(dt1938);
+        act10.bornIn(dt1961);
+        act11.bornIn(dt1964);
+        act12.bornIn(dt1970);
+        act13.bornIn(dt1981);
+        act14.bornIn(dt1971);
+        act15.bornIn(dt1955);
+
+        dir1.bornIn(dt1959);
+        dir2.bornIn(dt1965);
+        dir2.bornIn(dt1967);
+        dir3.bornIn(dt1951);
+        dir4.bornIn(dt1963);
+        dir5.bornIn(dt1954);
+        dir6.bornIn(dt1946);
+        dir7.bornIn(dt1968);
+        dir8.bornIn(dt1970);
+        dir9.bornIn(dt1944);
+        dir10.bornIn(dt1953);
+        dir11.bornIn(dt1946);
+        dir12.bornIn(dt1939);
+        dir13.bornIn(dt1942);
+        dir14.bornIn(dt1961);
+    }
+
+    public void createRel_releasedIn() {
+        mov1.releasedIn(dt1994, true);
+        mov2.releasedIn(dt1985, true);
+        mov3.releasedIn(dt1972, true);
+        mov4.releasedIn(dt2013, true);
+        mov5.releasedIn(dt1993, true);
+        mov6.releasedIn(dt2001, true);
+        mov7.releasedIn(dt2011, true);
+        mov8.releasedIn(dt1976, true);
+        mov9.releasedIn(dt1999, true);
+        mov10.releasedIn(dt1994, true);
+        mov11.releasedIn(dt2001, true);
+        mov12.releasedIn(dt2003, true);
+        mov13.releasedIn(dt1997, true);
+    }
+
+
+
+    public void updateRate() {
     try (Connector connector = new Connector("bolt://localhost:7687", "neo4j", "root")) {
         connector.recalculateRating(mov1.getName(), false, false, true, false);
         connector.recalculateRating(mov2.getName(), false, false, true, false);
@@ -302,7 +426,6 @@ public void updateRate() {
         connector.recalculateRating(dir13.getName(), false, true, false, false);
         connector.recalculateRating(dir14.getName(), false, true, false, false);
         connector.recalculateRating(dir15.getName(), false, true, false, false);
-        connector.recalculateRating(dir16.getName(), false, true, false, false);
 
         connector.recalculateRating(gen1.getName(), false, false, false, true);
         connector.recalculateRating(gen2.getName(), false, false, false, true);
