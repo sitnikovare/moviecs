@@ -139,22 +139,23 @@ public class Connector implements AutoCloseable {
         }
     }
 
+
     //Создание связи Person->Movie в БД
-    public void CreateRelation( Person person, Movie movie, final String relation) {
+    public void CreateRelation(Person person, Movie movie, final String relation) {
+        String prole = person.getRole();
+        String pname = person.getName();
+        String mname = movie.getName();
+
+        //MATCH (n:User {name: '996676572'}),(m:Actor {name: 'Киану Ривз'}) MERGE (n)-[r:likes]->(m)
+        //"MATCH (n:"+prole+" {name: '"+pname+"'}),(m:Movie {name: '"+mname+"'}) MERGE (n)-[r:likes]->(m)"
+
         try ( Session session = driver.session() ) {
             String createPM = session.writeTransaction( new TransactionWork<String>() {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    String prole = person.getRole();
-                    String pname = person.getName();
-                    String mname = movie.getName();
-
-                    Result result = tx.run( "MATCH (a:" + prole +"), (b:Movie) " +
-                                    "WHERE a.name = $pname " +
-                                    "AND b.name = $mname " +
-                                    "CREATE (a)-[r:" + relation + "]->(b) " +
-                                    "RETURN type(r)",
+                    Result result = tx.run( "MATCH (n:"+prole+" {name: '"
+                                    +pname+"'}),(m:Movie {name: '"+mname+"'}) MERGE (n)-[r:"+relation+"]->(m) RETURN type(r)",
                             parameters( "pname", pname, "mname", mname,
                                     "relation", relation ) );
                     return result.single().get( 0 ).asString();
@@ -178,11 +179,9 @@ public class Connector implements AutoCloseable {
                     String pname = person.getName();
                     String mname = movie.getName();
 
-                    Result result = tx.run( "MATCH (a:Movie), (b:" + prole + ") " +
-                                    "WHERE a.name = $mname " +
-                                    "AND b.name = $pname " +
-                                    "CREATE (a)-[r:" + relation + "]->(b) " +
-                                    "RETURN type(r)",
+                    Result result = tx.run( "MATCH (n:Movie {name: '"
+                                    +mname+"'}),(m:Movie {name: '"
+                                    +pname+"'}) MERGE (n)-[r:"+relation+"]->(m) RETURN type(r)",
                             parameters( "mname", mname, "pname", pname,
                                     "relation", relation ) );
                     return result.single().get( 0 ).asString();
@@ -207,11 +206,9 @@ public class Connector implements AutoCloseable {
                     String p1role = per1.getRole();
                     String p2role = per2.getRole();
 
-                    Result result = tx.run( "MATCH (a:" + p1role + "), (b:" + p2role + ") " +
-                                    "WHERE a.name = $p1name " +
-                                    "AND b.name = $p2name " +
-                                    "CREATE (a)-[r:" + relation + "]->(b) " +
-                                    "RETURN type(r)",
+                    Result result = tx.run( "MATCH (n:"+p1role+" {name: '"
+                                    +p1name+"'}),(m:"
+                                    +p2role+" {name: '"+p2name+"'}) MERGE (n)-[r:"+relation+"]->(m) RETURN type(r)",
                             parameters( "p1role", p1role, "p2name", p2role,
                                     "p1name", p1name, "p2name", p2name,
                                     "relation", relation ) );
@@ -236,11 +233,9 @@ public class Connector implements AutoCloseable {
                     String prole = person.getRole();
                     String gname = genre.getName();
 
-                    Result result = tx.run( "MATCH (a:" + prole + "), (b:Genre) " +
-                                    "WHERE a.name = $pname " +
-                                    "AND b.name = $gname " +
-                                    "CREATE (a)-[r:" + relation + "]->(b) " +
-                                    "RETURN type(r)",
+                    Result result = tx.run( "MATCH (n:"+prole+" {name: '"
+                                    +pname+"'}),(m:Genre {name: '"
+                                    +gname+"'}) MERGE (n)-[r:"+relation+"]->(m) RETURN type(r)",
                             parameters( "pname", pname, "gname", gname,
                                     "relation", relation ) );
                     return result.single().get( 0 ).asString();
@@ -263,11 +258,9 @@ public class Connector implements AutoCloseable {
                     String mname = movie.getName();
                     String gname = genre.getName();
 
-                    Result result = tx.run( "MATCH (a:Movie), (b:Genre) " +
-                                    "WHERE a.name = $mname " +
-                                    "AND b.name = $gname " +
-                                    "CREATE (a)-[r:" + relation + "]->(b) " +
-                                    "RETURN type(r)",
+                    Result result = tx.run( "MATCH (n:Movie {name: '"
+                                    +mname+"'}),(m:Genre {name: '"
+                                    +gname+"'}) MERGE (n)-[r:"+relation+"]->(m) RETURN type(r)",
                             parameters( "mname", mname, "gname", gname,
                                     "relation", relation ) );
                     return result.single().get( 0 ).asString();
@@ -290,11 +283,9 @@ public class Connector implements AutoCloseable {
                     String mname = movie.getName();
                     String dyear = date.getYear();
 
-                    Result result = tx.run( "MATCH (a:Movie), (b:Date) " +
-                                    "WHERE a.name = $mname " +
-                                    "AND b.year = $dyear " +
-                                    "CREATE (a)-[r:" + relation + "]->(b) " +
-                                    "RETURN type(r)",
+                    Result result = tx.run( "MATCH (n:Movie {name: '"
+                                    +mname+"'}),(m:Date {name: '"
+                                    +dyear+"'}) MERGE (n)-[r:"+relation+"]->(m) RETURN type(r)",
                             parameters( "mname", mname, "dyear", dyear,
                                     "relation", relation ) );
                     return result.single().get( 0 ).asString();
