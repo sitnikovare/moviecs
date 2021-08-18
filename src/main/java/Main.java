@@ -7,19 +7,19 @@ public class Main {
     public static void main( String... args ) throws Exception
     {
 
-        //Database moviecsDB = new Database();
+        Database moviecsDB = new Database();
         //moviecsDB.initDatabase();
-        //moviecsDB.createUsersRel();
-        //moviecsDB.updateRate();
+        moviecsDB.createUsersRel();
+        moviecsDB.updateRate();
 
 
-       TelegramBotsApi telegram = new TelegramBotsApi(DefaultBotSession.class);
-       Bot bot = new Bot();
-       try {
-           telegram.registerBot(bot);
-       } catch (TelegramApiRequestException e) {
-           e.printStackTrace();
-       }
+//       TelegramBotsApi telegram = new TelegramBotsApi(DefaultBotSession.class);
+//       Bot bot = new Bot();
+//       try {
+//           telegram.registerBot(bot);
+//       } catch (TelegramApiRequestException e) {
+//           e.printStackTrace();
+//       }
 
     }
 }
