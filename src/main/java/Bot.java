@@ -241,6 +241,7 @@ public class Bot extends TelegramLongPollingBot {
             }
         }
         else {
+            //TODO: info - rate, genre, released year
             if (fndMovie) {
                 movie = new Movie(update.getMessage().getText());
                 sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
@@ -253,7 +254,9 @@ public class Bot extends TelegramLongPollingBot {
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
+                fndMovie = false;
             }
+            //TODO: info - rate, born year (maybe county & city)
             else if (fndActor) {actor = new Actor(update.getMessage().getText());
                 sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
                 sendMessage.setText("Ваш выбор: актер\n" + actor.getName() + " \nРейтинг: " + actor.getRate());
@@ -265,6 +268,8 @@ public class Bot extends TelegramLongPollingBot {
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
+
+                fndActor = false;
             }
             else if (fndGenre) {genre = new Genre(update.getMessage().getText());
                 sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
@@ -277,7 +282,10 @@ public class Bot extends TelegramLongPollingBot {
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
+
+                fndGenre = false;
             }
+            //TODO: info - rate, born year (maybe county & city)
             else if (fndDirector) {director = new Director(update.getMessage().getText());
                 sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
                 sendMessage.setText("Ваш выбор: режиссер\n" + director.getName() + " \nРейтинг: " + director.getRate());
@@ -289,6 +297,8 @@ public class Bot extends TelegramLongPollingBot {
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
+
+                fndDirector = false;
             }
             else {
                 sendMessage.setText("ничего не понимаю:(");
