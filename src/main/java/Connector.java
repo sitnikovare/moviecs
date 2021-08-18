@@ -180,7 +180,7 @@ public class Connector implements AutoCloseable {
                     String mname = movie.getName();
 
                     Result result = tx.run( "MATCH (n:Movie {name: '"
-                                    +mname+"'}),(m:Movie {name: '"
+                                    +mname+"'}),(m:"+prole+" {name: '"
                                     +pname+"'}) MERGE (n)-[r:"+relation+"]->(m) RETURN type(r)",
                             parameters( "mname", mname, "pname", pname,
                                     "relation", relation ) );
@@ -284,7 +284,7 @@ public class Connector implements AutoCloseable {
                     String dyear = date.getYear();
 
                     Result result = tx.run( "MATCH (n:Movie {name: '"
-                                    +mname+"'}),(m:Date {name: '"
+                                    +mname+"'}),(m:Date {year: '"
                                     +dyear+"'}) MERGE (n)-[r:"+relation+"]->(m) RETURN type(r)",
                             parameters( "mname", mname, "dyear", dyear,
                                     "relation", relation ) );
@@ -292,6 +292,31 @@ public class Connector implements AutoCloseable {
                 }
             } );
             System.out.println( createPG );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    //Person->Date
+    public void CreateRelation(Person person, Date date, final String relation) {
+        String prole = person.getRole();
+        String pname = person.getName();
+        String dyear = date.getYear();
+
+        try ( Session session = driver.session() ) {
+            String createPM = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    Result result = tx.run( "MATCH (n:"+prole+" {name: '"
+                                    +pname+"'}),(m:Date {year: '"+dyear+"'}) MERGE (n)-[r:"+relation+"]->(m) RETURN type(r)",
+                            parameters( "pname", pname, "dyear", dyear,
+                                    "relation", relation ) );
+                    return result.single().get( 0 ).asString();
+                }
+            } );
+            System.out.println( createPM );
         }
         catch(Exception ex) {
             System.out.println(ex);
@@ -745,7 +770,7 @@ public class Connector implements AutoCloseable {
     }
 
     public void setRate(String role, String nodeName, String recalc) {
-        System.out.println("in SETRATE, query: " + "MATCH (m:"+role+" {name: '"+nodeName+"'}) SET m.rate = '"+recalc+"'");
+
         try ( Session session = driver.session() ) {
             String query = session.writeTransaction( new TransactionWork<String>() {
                 @Override
@@ -938,7 +963,7 @@ public class Connector implements AutoCloseable {
                     j++;
                 }
 
-                result+= "Жанр " + genres[i] + ":\n";
+                result+= "**Жанр " + genres[i] + ":**\n";
                 for (int k = 0; k < 10; k++) {
                     if (arrayResult[0][0] == null) {
                         result += "Ни один фильм данного жанра не получил отметку \"Нравится\" от пользователей.\n";

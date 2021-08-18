@@ -25,9 +25,10 @@ public class Movie {
         try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
             String rate = connector.recalculateRating(this.name, false, false, true, false);
-            Double drate = Double.valueOf(rate);
-            rate = String.format("%.3f", drate);
-            setRate(rate);
+            //Double drate = Double.valueOf(rate);
+            //this.rate = String.format("%.3f", drate);
+            //setRate(this.rate);
+            this.rate = rate;
         }
         catch (Exception ex) {
             System.out.println(ex);

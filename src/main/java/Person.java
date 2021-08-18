@@ -29,6 +29,16 @@ public class Person {
         }
     }
 
+    public void bornIn(Date date) {
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        {
+            connector.CreateRelation( this, date, "bornIn");
+        }
+        catch (Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
     public void deleteFromDB() {
         try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {

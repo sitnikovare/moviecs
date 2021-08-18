@@ -244,7 +244,7 @@ public class Bot extends TelegramLongPollingBot {
             if (fndMovie) {
                 movie = new Movie(update.getMessage().getText());
                 sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
-                sendMessage.setText("Ваш выброр: фильм\n" + movie.getName() + " \nРейтинг: " + movie.getRate());
+                sendMessage.setText("Ваш выбор: фильм\n" + movie.getName() + " \nРейтинг: " + movie.getRate());
                 try {
                     execute(sendMessage);
                     execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, false, false, false));
@@ -256,7 +256,7 @@ public class Bot extends TelegramLongPollingBot {
             }
             else if (fndActor) {actor = new Actor(update.getMessage().getText());
                 sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
-                sendMessage.setText("Ваш выброр: актер\n" + actor.getName() + " \nРейтинг: " + actor.getRate());
+                sendMessage.setText("Ваш выбор: актер\n" + actor.getName() + " \nРейтинг: " + actor.getRate());
                 try {
                     execute(sendMessage);
                     execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, false, false, false));
@@ -268,7 +268,7 @@ public class Bot extends TelegramLongPollingBot {
             }
             else if (fndGenre) {genre = new Genre(update.getMessage().getText());
                 sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
-                sendMessage.setText("Ваш выброр: жанр\n" + genre.getName() + " \nРейтинг: " + genre.getRate());
+                sendMessage.setText("Ваш выбор: жанр\n" + genre.getName() + " \nРейтинг: " + genre.getRate());
                 try {
                     execute(sendMessage);
                     execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, false, false, false));
@@ -280,7 +280,7 @@ public class Bot extends TelegramLongPollingBot {
             }
             else if (fndDirector) {director = new Director(update.getMessage().getText());
                 sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
-                sendMessage.setText("Ваш выброр: режиссер\n" + director.getName() + " \nРейтинг: " + director.getRate());
+                sendMessage.setText("Ваш выбор: режиссер\n" + director.getName() + " \nРейтинг: " + director.getRate());
                 try {
                     execute(sendMessage);
                     execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, false, false, false));
