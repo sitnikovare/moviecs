@@ -1,5 +1,6 @@
 public class User extends Person {
 
+    //TODO: доп.инфо - год и место рождения/проживания
     public User() {}
     public User(String n) {
         name = n;

@@ -27,6 +27,8 @@ public class Bot extends TelegramLongPollingBot {
     private boolean fndGenre = false;
     private boolean fndDate = false;
 
+    Recommedation recom = new Recommedation( "bolt://localhost:7687", "neo4j", "root" );
+
     @Override
     //TODO: make a nice messages (bold font for example)
     public void onUpdateReceived(Update update) {
@@ -212,34 +214,303 @@ public class Bot extends TelegramLongPollingBot {
             }
         }
         else if (update.getMessage().getText().equals("Получить рекомендацию")) {
-            try {
-                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, false, false, true));
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
-        }
-        //TODO: write a function to recommend a random film
-        else if (update.getMessage().getText().equals("Случ.фильм")) {
-            sendMessage.setText("ТУТ ДОЛЖНА БЫТЬ РЕКОМЕНДАЦИЯ СЛУЧАЙНОГО ФИЛЬМА");
+            String msg = "Список команд для рекомендации:\n"
+                    + "10popular - 10 самых популярных фильмов\n"
+                    + "10popularCluster - 10 самых популярных фильмов, похожих на фильм\n"
+                    + "10popularGenre - 10 популярных фильмов по жанру\n"
+                    + "10popularCountry - 10 популярных фильмов по стране\n"
+                    + "10popularYear - 10 популярных фильмов по году\n"
+                    + "10popularDirector - 10 популярных фильмов режиссера\n"
+                    + "10popularActor - 10 популярных фильмов актера\n"
+                    + "10popularWriter - 10 популярных фильмов сценариста\n"
+                    + "10popularComposer - 10 популярных фильмов композитора\n"
+                    + "actorsFromFilm - все актеры данного фильма\n"
+                    + "directorsFromFilm - все режиссеры данного фильма\n"
+                    + "writersFromFilm - все сценаристы данного фильма\n"
+                    + "filmsByActor - все фильмы данного актера\n"
+                    + "filmsByDirector - все фильмы данного режиссера\n"
+                    + "filmsByComposer - все фильмы данного композитора\n"
+                    + "filmsByWriter - все фильмы данного сценариста\n"
+                    + "25filmsByYear - 25 фильмов данного года\n"
+                    + "25filmsByCountry - 25 фильмов данной страны\n"
+                    + "25filmsByGenre - 25 фильмов данного жанра\n";
+            sendMessage.setText(msg);
             sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
-
             try {
                 execute(sendMessage);
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
         }
-        //TODO: write a function to recommend a personalized film
-        else if (update.getMessage().getText().equals("Перс.фильм")) {
-            sendMessage.setText("ТУТ ДОЛЖНА БЫТЬ РЕКОМЕНДАЦИЯ ПЕРСОНАЛИЗИРОВАННОГО ФИЛЬМА");
+        else if (update.getMessage().getText().equals("10popular")) {
+            String msg = "10 самых популярных фильмов:\n";
+            String rec = recom.popular10();
+            sendMessage.setText(msg + rec);
             sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
-
             try {
                 execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
         }
+        else if (update.getMessage().getText().contains("10popularCluster")) {
+            String movie = update.getMessage().getText().substring(17);
+            String msg = "10 популярных фильмов, похожих на: ";
+            String rec = recom.popular10Cluster(movie);
+            sendMessage.setText(msg + movie + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().contains("10popularGenre")) {
+            String genre = update.getMessage().getText().substring(15);
+            String msg = "10 популярных фильмов в жанре: ";
+            String rec = recom.popular10Genre(genre);
+            sendMessage.setText(msg + genre + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().contains("10popularCountry")) {
+            String country = update.getMessage().getText().substring(17);
+            String msg = "10 популярных фильмов по стране: ";
+            String rec = recom.popular10Country(country);
+            sendMessage.setText(msg + country + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().contains("10popularYear")) {
+            String year = update.getMessage().getText().substring(14);
+            String msg = "10 популярных фильмов по году: ";
+            String rec = recom.popular10Year(year);
+            sendMessage.setText(msg + year + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().contains("10popularDirector")) {
+            String str = update.getMessage().getText().substring(18);
+            String msg = "10 популярных фильмов режиссера: ";
+            String rec = recom.popular10Director(str);
+            sendMessage.setText(msg + str + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().contains("10popularActor")) {
+            String str = update.getMessage().getText().substring(15);
+            String msg = "10 популярных фильмов актера: ";
+            String rec = recom.popular10Actor(str);
+            sendMessage.setText(msg + str + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().contains("10popularComposer")) {
+            String str = update.getMessage().getText().substring(18);
+            String msg = "10 популярных фильмов композитора: ";
+            String rec = recom.popular10Composer(str);
+            sendMessage.setText(msg + str + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().contains("10popularWriter")) {
+            String str = update.getMessage().getText().substring(16);
+            String msg = "10 популярных фильмов сценариста: ";
+            String rec = recom.popular10Writer(str);
+            sendMessage.setText(msg + str + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().contains("actorsFromFilm")) {
+            String str = update.getMessage().getText().substring(15);
+            String msg = "Все актеры фильма: ";
+            String rec = recom.actorsFromFilm(str);
+            sendMessage.setText(msg + str + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().contains("directorsFromFilm")) {
+            String str = update.getMessage().getText().substring(18);
+            String msg = "Все режиссеры фильма: ";
+            String rec = recom.directorsFromFilm(str);
+            sendMessage.setText(msg + str + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().contains("writersFromFilm")) {
+            String str = update.getMessage().getText().substring(16);
+            String msg = "Все сценаристы фильма: ";
+            String rec = recom.writersFromFilm(str);
+            sendMessage.setText(msg + str + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().contains("filmsByActor")) {
+            String str = update.getMessage().getText().substring(13);
+            String msg = "Все фильмы данного актера: ";
+            String rec = recom.filmsByActor(str);
+            sendMessage.setText(msg + str + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().contains("filmsByDirector")) {
+            String str = update.getMessage().getText().substring(16);
+            String msg = "Все фильмы данного режиссера: ";
+            String rec = recom.filmsByDirector(str);
+            sendMessage.setText(msg + str + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().contains("filmsByComposer")) {
+            String str = update.getMessage().getText().substring(16);
+            String msg = "Все фильмы данного композитора: ";
+            String rec = recom.filmsByComposer(str);
+            sendMessage.setText(msg + str + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().contains("filmsByWriter")) {
+            String str = update.getMessage().getText().substring(14);
+            String msg = "Все фильмы данного сценариста: ";
+            String rec = recom.filmsByWriter(str);
+            sendMessage.setText(msg + str + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().contains("25filmsByYear")) {
+            String str = update.getMessage().getText().substring(14);
+            String msg = "Все фильмы данного года: ";
+            String rec = recom.films25ByYear(str);
+            sendMessage.setText(msg + str + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().contains("25filmsByCountry")) {
+            String str = update.getMessage().getText().substring(17);
+            String msg = "Все фильмы данной страны: ";
+            String rec = recom.films25ByCountry(str);
+            sendMessage.setText(msg + str + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().contains("25filmsByGenre")) {
+            String str = update.getMessage().getText().substring(15);
+            String msg = "Все фильмы данного жанра: ";
+            String rec = recom.films25ByGenre(str);
+            sendMessage.setText(msg + str + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+//        //TODO: write a function to recommend a random film
+//        else if (update.getMessage().getText().equals("Случ.фильм")) {
+//            sendMessage.setText("ТУТ ДОЛЖНА БЫТЬ РЕКОМЕНДАЦИЯ СЛУЧАЙНОГО ФИЛЬМА");
+//            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+//
+//            try {
+//                execute(sendMessage);
+//            } catch (TelegramApiException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        //TODO: write a function to recommend a personalized film
+//        else if (update.getMessage().getText().equals("Перс.фильм")) {
+//            sendMessage.setText("ТУТ ДОЛЖНА БЫТЬ РЕКОМЕНДАЦИЯ ПЕРСОНАЛИЗИРОВАННОГО ФИЛЬМА");
+//            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+//
+//            try {
+//                execute(sendMessage);
+//            } catch (TelegramApiException e) {
+//                e.printStackTrace();
+//            }
+//        }
+        //TODO: сделать обработку не найденных узлов
         else {
             //TODO: info - rate, genre, released year
             if (fndMovie) {
@@ -349,6 +620,7 @@ public class Bot extends TelegramLongPollingBot {
         line1.clear();
         line2.clear();
 
+        //TODO: добавить кнопку ПРОФИЛЬ с доп [Показать, Редактировать, Гл.меню]
         if (main) {
             line1.add("Поиск");
             line1.add("Рейтинг");

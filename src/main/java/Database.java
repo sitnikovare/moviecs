@@ -1,5 +1,7 @@
 public class Database {
 
+    //TODO: добавить сюда country & city
+
     Movie mov1 = new Movie("Форрест Гамп"); //1994
     Movie mov2 = new Movie("Назад в будущее"); //1985
     Movie mov3 = new Movie("Крестный отец"); //1972

@@ -791,6 +791,7 @@ public class Connector implements AutoCloseable {
     }
 
     //Пересчет рейтинга узла
+    //TODO: придумать новую формула подсчета рейтинга
     public String recalculateRating(final String nodeName, boolean isActor, boolean isDirector,
                                   boolean isMovie, boolean isGenre) {
         Integer[] numbersUserLikes = new Integer[2];
@@ -810,7 +811,7 @@ public class Connector implements AutoCloseable {
                     Result resultUsers = tx.run( "MATCH (n:User) return count(n)",
                             parameters( ) );
                     numbersUserLikes[0] = resultUsers.single().get( 0 ).asInt();
-                    Result resultLikes = tx.run( "MATCH (n)-[r:likes]->(m:"+role+" {name: $nodeName})  return count(r)",
+                    Result resultLikes = tx.run( "MATCH (n)-[r:LIKES]->(m:"+role+" {name: $nodeName})  return count(r)",
                             parameters("role", role, "nodeName", nodeName ) );
                     numbersUserLikes[1] = resultLikes.single().get( 0 ).asInt();
                     return "0";
