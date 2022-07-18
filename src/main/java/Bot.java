@@ -215,25 +215,32 @@ public class Bot extends TelegramLongPollingBot {
         }
         else if (update.getMessage().getText().equals("Получить рекомендацию")) {
             String msg = "Список команд для рекомендации:\n"
-                    + "10popular - 10 самых популярных фильмов\n"
-                    + "10popularCluster - 10 самых популярных фильмов, похожих на фильм\n"
-                    + "10popularGenre - 10 популярных фильмов по жанру\n"
-                    + "10popularCountry - 10 популярных фильмов по стране\n"
-                    + "10popularYear - 10 популярных фильмов по году\n"
-                    + "10popularDirector - 10 популярных фильмов режиссера\n"
-                    + "10popularActor - 10 популярных фильмов актера\n"
-                    + "10popularWriter - 10 популярных фильмов сценариста\n"
-                    + "10popularComposer - 10 популярных фильмов композитора\n"
-                    + "actorsFromFilm - все актеры данного фильма\n"
-                    + "directorsFromFilm - все режиссеры данного фильма\n"
-                    + "writersFromFilm - все сценаристы данного фильма\n"
-                    + "filmsByActor - все фильмы данного актера\n"
-                    + "filmsByDirector - все фильмы данного режиссера\n"
-                    + "filmsByComposer - все фильмы данного композитора\n"
-                    + "filmsByWriter - все фильмы данного сценариста\n"
-                    + "25filmsByYear - 25 фильмов данного года\n"
-                    + "25filmsByCountry - 25 фильмов данной страны\n"
-                    + "25filmsByGenre - 25 фильмов данного жанра\n";
+                    + "/01 - 10 самых популярных фильмов\n"
+                    + "/02 <название фильма> - 10 самых популярных фильмов, похожих на фильм\n"
+                    + "/03 <жанр> - 10 популярных фильмов по жанру\n"
+                    + "/04 <страна> - 10 популярных фильмов по стране\n"
+                    + "/05 <год> - 10 популярных фильмов по году\n"
+                    + "/06 <режиссер> - 10 популярных фильмов режиссера\n"
+                    + "/07 <актер> - 10 популярных фильмов актера\n"
+                    + "/08 <сценарист> - 10 популярных фильмов сценариста\n"
+                    + "/09 <композитор> - 10 популярных фильмов композитора\n"
+                    + "/10 <фильм> - все актеры данного фильма\n"
+                    + "/11 <фильм> - все режиссеры данного фильма\n"
+                    + "/12 <фильм> - все сценаристы данного фильма\n"
+                    + "/13 <актер> - все фильмы данного актера\n"
+                    + "/14 <режиссер> - все фильмы данного режиссера\n"
+                    + "/15 <композитор> - все фильмы данного композитора\n"
+                    + "/16 <сценарист> - все фильмы данного сценариста\n"
+                    + "/17 <год> - 25 фильмов данного года\n"
+                    + "/18 <страна> - 25 фильмов данной страны\n"
+                    + "/19 <жанр> - 25 фильмов данного жанра\n"
+                    + "/20 <год 4 знака>_<жанр> - 10 фильмов данного года и жанра\n"
+                    + "/21 <режиссер>_<жанр> - 10 фильмов данного режиссера и жанра\n"
+                    + "/22 <режиссер>_<страна> - 10 фильмов данного режиссера и страны\n"
+                    + "/23 <актер>_<жанр> - 10 фильмов данного актера и жанра\n"
+                    + "/24 <фильм> - 10 похожих фильмов того же года\n"
+                    + "/25 <фильм> - 10 похожих фильмов того же жанра\n"
+                    + "/26 <фильм> - 10 похожих фильмов той же страны\n";
             sendMessage.setText(msg);
             sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
             try {
@@ -242,7 +249,7 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
-        else if (update.getMessage().getText().equals("10popular")) {
+        else if (update.getMessage().getText().equals("/01")) {
             String msg = "10 самых популярных фильмов:\n";
             String rec = recom.popular10();
             sendMessage.setText(msg + rec);
@@ -254,8 +261,8 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
-        else if (update.getMessage().getText().contains("10popularCluster")) {
-            String movie = update.getMessage().getText().substring(17);
+        else if (update.getMessage().getText().contains("/02")) {
+            String movie = update.getMessage().getText().substring(4);
             String msg = "10 популярных фильмов, похожих на: ";
             String rec = recom.popular10Cluster(movie);
             sendMessage.setText(msg + movie + "\n" + rec);
@@ -267,8 +274,8 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
-        else if (update.getMessage().getText().contains("10popularGenre")) {
-            String genre = update.getMessage().getText().substring(15);
+        else if (update.getMessage().getText().contains("/03")) {
+            String genre = update.getMessage().getText().substring(4);
             String msg = "10 популярных фильмов в жанре: ";
             String rec = recom.popular10Genre(genre);
             sendMessage.setText(msg + genre + "\n" + rec);
@@ -280,8 +287,8 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
-        else if (update.getMessage().getText().contains("10popularCountry")) {
-            String country = update.getMessage().getText().substring(17);
+        else if (update.getMessage().getText().contains("/04")) {
+            String country = update.getMessage().getText().substring(4);
             String msg = "10 популярных фильмов по стране: ";
             String rec = recom.popular10Country(country);
             sendMessage.setText(msg + country + "\n" + rec);
@@ -293,8 +300,8 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
-        else if (update.getMessage().getText().contains("10popularYear")) {
-            String year = update.getMessage().getText().substring(14);
+        else if (update.getMessage().getText().contains("/05")) {
+            String year = update.getMessage().getText().substring(4);
             String msg = "10 популярных фильмов по году: ";
             String rec = recom.popular10Year(year);
             sendMessage.setText(msg + year + "\n" + rec);
@@ -306,8 +313,8 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
-        else if (update.getMessage().getText().contains("10popularDirector")) {
-            String str = update.getMessage().getText().substring(18);
+        else if (update.getMessage().getText().contains("/06")) {
+            String str = update.getMessage().getText().substring(4);
             String msg = "10 популярных фильмов режиссера: ";
             String rec = recom.popular10Director(str);
             sendMessage.setText(msg + str + "\n" + rec);
@@ -319,8 +326,8 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
-        else if (update.getMessage().getText().contains("10popularActor")) {
-            String str = update.getMessage().getText().substring(15);
+        else if (update.getMessage().getText().contains("/07")) {
+            String str = update.getMessage().getText().substring(4);
             String msg = "10 популярных фильмов актера: ";
             String rec = recom.popular10Actor(str);
             sendMessage.setText(msg + str + "\n" + rec);
@@ -332,21 +339,8 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
-        else if (update.getMessage().getText().contains("10popularComposer")) {
-            String str = update.getMessage().getText().substring(18);
-            String msg = "10 популярных фильмов композитора: ";
-            String rec = recom.popular10Composer(str);
-            sendMessage.setText(msg + str + "\n" + rec);
-            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
-            try {
-                execute(sendMessage);
-                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
-        }
-        else if (update.getMessage().getText().contains("10popularWriter")) {
-            String str = update.getMessage().getText().substring(16);
+        else if (update.getMessage().getText().contains("/08")) {
+            String str = update.getMessage().getText().substring(4);
             String msg = "10 популярных фильмов сценариста: ";
             String rec = recom.popular10Writer(str);
             sendMessage.setText(msg + str + "\n" + rec);
@@ -358,8 +352,21 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
-        else if (update.getMessage().getText().contains("actorsFromFilm")) {
-            String str = update.getMessage().getText().substring(15);
+        else if (update.getMessage().getText().contains("/09")) {
+            String str = update.getMessage().getText().substring(4);
+            String msg = "10 популярных фильмов композитора: ";
+            String rec = recom.popular10Composer(str);
+            sendMessage.setText(msg + str + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().contains("/10")) {
+            String str = update.getMessage().getText().substring(4);
             String msg = "Все актеры фильма: ";
             String rec = recom.actorsFromFilm(str);
             sendMessage.setText(msg + str + "\n" + rec);
@@ -371,8 +378,8 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
-        else if (update.getMessage().getText().contains("directorsFromFilm")) {
-            String str = update.getMessage().getText().substring(18);
+        else if (update.getMessage().getText().contains("/11")) {
+            String str = update.getMessage().getText().substring(4);
             String msg = "Все режиссеры фильма: ";
             String rec = recom.directorsFromFilm(str);
             sendMessage.setText(msg + str + "\n" + rec);
@@ -384,8 +391,8 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
-        else if (update.getMessage().getText().contains("writersFromFilm")) {
-            String str = update.getMessage().getText().substring(16);
+        else if (update.getMessage().getText().contains("/12")) {
+            String str = update.getMessage().getText().substring(4);
             String msg = "Все сценаристы фильма: ";
             String rec = recom.writersFromFilm(str);
             sendMessage.setText(msg + str + "\n" + rec);
@@ -397,8 +404,8 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
-        else if (update.getMessage().getText().contains("filmsByActor")) {
-            String str = update.getMessage().getText().substring(13);
+        else if (update.getMessage().getText().contains("/13")) {
+            String str = update.getMessage().getText().substring(4);
             String msg = "Все фильмы данного актера: ";
             String rec = recom.filmsByActor(str);
             sendMessage.setText(msg + str + "\n" + rec);
@@ -410,8 +417,8 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
-        else if (update.getMessage().getText().contains("filmsByDirector")) {
-            String str = update.getMessage().getText().substring(16);
+        else if (update.getMessage().getText().contains("/14")) {
+            String str = update.getMessage().getText().substring(4);
             String msg = "Все фильмы данного режиссера: ";
             String rec = recom.filmsByDirector(str);
             sendMessage.setText(msg + str + "\n" + rec);
@@ -423,8 +430,8 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
-        else if (update.getMessage().getText().contains("filmsByComposer")) {
-            String str = update.getMessage().getText().substring(16);
+        else if (update.getMessage().getText().contains("/15")) {
+            String str = update.getMessage().getText().substring(4);
             String msg = "Все фильмы данного композитора: ";
             String rec = recom.filmsByComposer(str);
             sendMessage.setText(msg + str + "\n" + rec);
@@ -436,8 +443,8 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
-        else if (update.getMessage().getText().contains("filmsByWriter")) {
-            String str = update.getMessage().getText().substring(14);
+        else if (update.getMessage().getText().contains("/16")) {
+            String str = update.getMessage().getText().substring(4);
             String msg = "Все фильмы данного сценариста: ";
             String rec = recom.filmsByWriter(str);
             sendMessage.setText(msg + str + "\n" + rec);
@@ -449,8 +456,8 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
-        else if (update.getMessage().getText().contains("25filmsByYear")) {
-            String str = update.getMessage().getText().substring(14);
+        else if (update.getMessage().getText().contains("/17")) {
+            String str = update.getMessage().getText().substring(4);
             String msg = "Все фильмы данного года: ";
             String rec = recom.films25ByYear(str);
             sendMessage.setText(msg + str + "\n" + rec);
@@ -462,8 +469,8 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
-        else if (update.getMessage().getText().contains("25filmsByCountry")) {
-            String str = update.getMessage().getText().substring(17);
+        else if (update.getMessage().getText().contains("/18")) {
+            String str = update.getMessage().getText().substring(4);
             String msg = "Все фильмы данной страны: ";
             String rec = recom.films25ByCountry(str);
             sendMessage.setText(msg + str + "\n" + rec);
@@ -475,10 +482,117 @@ public class Bot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
-        else if (update.getMessage().getText().contains("25filmsByGenre")) {
-            String str = update.getMessage().getText().substring(15);
+        else if (update.getMessage().getText().contains("/19")) {
+            String str = update.getMessage().getText().substring(4);
             String msg = "Все фильмы данного жанра: ";
             String rec = recom.films25ByGenre(str);
+            sendMessage.setText(msg + str + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().contains("/20")) {
+            String str = update.getMessage().getText().substring(4);
+            int idx = str.indexOf('_');
+            String substr1 = str.substring(0, idx);
+            String substr2 = str.substring(idx+1);
+            ////////////////////////////////////////
+            String msg = "Все фильмы данного года и жанра: ";
+            String rec = recom.films10ByYearGenre(substr1, substr2);
+            sendMessage.setText(msg + str + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().contains("/21")) {
+            String str = update.getMessage().getText().substring(4);
+            int idx = str.indexOf('_');
+            String substr1 = str.substring(0, idx);
+            String substr2 = str.substring(idx+1);
+            ////////////////////////////////////////
+            String msg = "Все фильмы данного режиссера и жанра: ";
+            String rec = recom.films10ByDirectorGenre(substr1, substr2);
+            sendMessage.setText(msg + str + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().contains("/22")) {
+            String str = update.getMessage().getText().substring(4);
+            int idx = str.indexOf('_');
+            String substr1 = str.substring(0, idx);
+            String substr2 = str.substring(idx+1);
+            ////////////////////////////////////////
+            String msg = "Все фильмы данного режиссера, снятые в стране: ";
+            String rec = recom.films10ByDirectorCountry(substr1, substr2);
+            sendMessage.setText(msg + str + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().contains("/23")) {
+            String str = update.getMessage().getText().substring(4);
+            int idx = str.indexOf('_');
+            String substr1 = str.substring(0, idx);
+            String substr2 = str.substring(idx+1);
+            ////////////////////////////////////////
+            String msg = "Все фильмы, в которых снимался актер, такого жанра: ";
+            String rec = recom.films10ByActorGenre(substr1, substr2);
+            sendMessage.setText(msg + str + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().contains("/24")) {
+            String str = update.getMessage().getText().substring(4);
+            String msg = "10 похожих фильмов того же года: ";
+            String rec = recom.films10ByFilmYear(str);
+            sendMessage.setText(msg + str + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().contains("/25")) {
+            String str = update.getMessage().getText().substring(4);
+            String msg = "10 похожих фильмов того же жанра: ";
+            String rec = recom.films10ByFilmGenre(str);
+            sendMessage.setText(msg + str + "\n" + rec);
+            sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
+            try {
+                execute(sendMessage);
+                execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), true, false, false, false));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (update.getMessage().getText().contains("/26")) {
+            String str = update.getMessage().getText().substring(4);
+            String msg = "10 похожих фильмов той же страны: ";
+            String rec = recom.films10ByFilmCountry(str);
             sendMessage.setText(msg + str + "\n" + rec);
             sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
             try {
@@ -510,13 +624,23 @@ public class Bot extends TelegramLongPollingBot {
 //                e.printStackTrace();
 //            }
 //        }
-        //TODO: сделать обработку не найденных узлов
         else {
+            //TODO: сделать обработку не найденных узлов
             //TODO: info - rate, genre, released year
             if (fndMovie) {
                 movie = new Movie(update.getMessage().getText());
                 sendMessage.setChatId(String.valueOf(update.getMessage().getChatId()));
-                sendMessage.setText("Ваш выбор: фильм\n" + movie.getName() + " \nРейтинг: " + movie.getRate());
+                String mname = "Ваш выбор: фильм\n" + movie.getName();
+                String mrate = " \nРейтинг: " + movie.getRate();
+
+                String mdir = "\nРежиссер: " + movie.getDirector();
+                String mwrit = "\nСценарист: " + movie.getWriter();
+//                String mcomp = "\nКомпозитор: " + movie.getComposer();
+                String mcont = "\nСтрана: " + movie.getCountry();
+                String myear = "\nГод выхода в прокат: " + movie.getYear();
+                //актеры
+                sendMessage.setText(mname + mrate + mwrit + mdir /* + mcomp */ + mcont + myear);
+
                 try {
                     execute(sendMessage);
                     execute(sendReplyKeyBoardMessage(update.getMessage().getChatId(), false, false, false, false));
@@ -625,7 +749,7 @@ public class Bot extends TelegramLongPollingBot {
             line1.add("Поиск");
             line1.add("Рейтинг");
             line2.add("Получить рекомендацию");
-            sm.setText("Что хотите найти?");
+            sm.setText("Какое действие совершить?");
         }
         else if (search) {
             line1.add("Фильм");
@@ -638,7 +762,6 @@ public class Bot extends TelegramLongPollingBot {
         else if(rate) {
             line1.add("Фильмы");
             line1.add("Жанры");
-            line1.add("Фильмы по жанрам");
             line2.add("Актеры");
             line2.add("Режиссеры");
             line2.add("Гл.меню");

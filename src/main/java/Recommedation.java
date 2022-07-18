@@ -619,4 +619,214 @@ public class Recommedation {
         }
         return res;
     }
+
+    public String films10ByYearGenre(String year, String genre) {
+        String res = "";
+        try ( Session session = driver.session() ) {
+            res = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    Result result = tx.run( "MATCH (m1:Movie)-[RELEASED_IN]->(y: Year {name: '"+ year +"'}),\n" +
+                                    "(m2:Movie)-[IS_GENRE]->(g: Genre {name: '"+genre+"'})\n" +
+                                    "WHERE m1.id = m2.id\n" +
+                                    "RETURN m1.name ORDER BY m2.rate DESC LIMIT 10",
+                            parameters() );
+                    List<Record> res = result.list();
+                    String res0 = "";
+                    for( Record record: res) {
+                        List<Pair<String, Value>> rec = record.fields(); //get record's fields
+                        for (Pair<String, Value> recPair: rec) {
+                            res0 += recPair.value().asString() + "\n";
+                        }
+                    }
+                    return res0;
+                }
+            } );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+        return res;
+    }
+
+    public String films10ByDirectorGenre(String dir, String genre) {
+        String res = "";
+        try ( Session session = driver.session() ) {
+            res = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    Result result = tx.run( "MATCH (m1:Movie)-[DIRECTED_BY]->(d: People {name: '"+dir+"'}),\n" +
+                                    "(m2:Movie)-[IS_GENRE]->(g: Genre {name: '"+genre+"'})\n" +
+                                    "WHERE m1.id = m2.id\n" +
+                                    "RETURN m1.name ORDER BY m2.rate DESC LIMIT 10",
+                            parameters() );
+                    List<Record> res = result.list();
+                    String res0 = "";
+                    for( Record record: res) {
+                        List<Pair<String, Value>> rec = record.fields(); //get record's fields
+                        for (Pair<String, Value> recPair: rec) {
+                            res0 += recPair.value().asString() + "\n";
+                        }
+                    }
+                    return res0;
+                }
+            } );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+        return res;
+    }
+
+    public String films10ByDirectorCountry(String dir, String country) {
+        String res = "";
+        try ( Session session = driver.session() ) {
+            res = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    Result result = tx.run( "MATCH (m1:Movie)-[DIRECTED_BY]->(d: People {name: '"+dir+"'}),\n" +
+                                    "(m2:Movie)-[FROM_COUNTRY]->(c: Country {name: '"+country+"'})\n" +
+                                    "WHERE m1.id = m2.id\n" +
+                                    "RETURN m1.name ORDER BY m2.rate DESC LIMIT 10",
+                            parameters() );
+                    List<Record> res = result.list();
+                    String res0 = "";
+                    for( Record record: res) {
+                        List<Pair<String, Value>> rec = record.fields(); //get record's fields
+                        for (Pair<String, Value> recPair: rec) {
+                            res0 += recPair.value().asString() + "\n";
+                        }
+                    }
+                    return res0;
+                }
+            } );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+        return res;
+    }
+
+    public String films10ByActorGenre(String act, String gen) {
+        String res = "";
+        try ( Session session = driver.session() ) {
+            res = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    Result result = tx.run( "MATCH (a: People {name: '"+act+"'})-[ACTED_IN]->(m1: Movie),\n" +
+                                    "(m2:Movie)-[FROM_COUNTRY]->(g: Genre {name: '"+gen+"'})\n" +
+                                    "WHERE m1.id = m2.id\n" +
+                                    "RETURN m1.name ORDER BY m2.rate DESC LIMIT 10",
+                            parameters() );
+                    List<Record> res = result.list();
+                    String res0 = "";
+                    for( Record record: res) {
+                        List<Pair<String, Value>> rec = record.fields(); //get record's fields
+                        for (Pair<String, Value> recPair: rec) {
+                            res0 += recPair.value().asString() + "\n";
+                        }
+                    }
+                    return res0;
+                }
+            } );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+        return res;
+    }
+
+    public String films10ByFilmYear(String mov) {
+        String res = "";
+        try ( Session session = driver.session() ) {
+            res = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    Result result = tx.run( "MATCH (m1: Movie {name: '"+mov+"'})-[]->(y1: Year), \n" +
+                                    "(m2: Movie)-[]->(y2: Year)\n" +
+                                    "WHERE m1.cluster = m2.cluster AND y1.name = y2.name\n" +
+                                    "RETURN m2.name ORDER BY m2.rate DESC LIMIT 10",
+                            parameters() );
+                    List<Record> res = result.list();
+                    String res0 = "";
+                    for( Record record: res) {
+                        List<Pair<String, Value>> rec = record.fields(); //get record's fields
+                        for (Pair<String, Value> recPair: rec) {
+                            res0 += recPair.value().asString() + "\n";
+                        }
+                    }
+                    return res0;
+                }
+            } );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+        return res;
+    }
+
+    public String films10ByFilmGenre(String mov) {
+        String res = "";
+        try ( Session session = driver.session() ) {
+            res = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    Result result = tx.run( "MATCH (m1: Movie {name: '"+mov+"'})-[]->(g1: Genre), \n" +
+                                    "(m2: Movie)-[]->(g2: Genre)\n" +
+                                    "WHERE m1.cluster = m2.cluster AND g1.name = g2.name\n" +
+                                    "RETURN m2.name ORDER BY m2.rate DESC LIMIT 10 ",
+                            parameters() );
+                    List<Record> res = result.list();
+                    String res0 = "";
+                    for( Record record: res) {
+                        List<Pair<String, Value>> rec = record.fields(); //get record's fields
+                        for (Pair<String, Value> recPair: rec) {
+                            res0 += recPair.value().asString() + "\n";
+                        }
+                    }
+                    return res0;
+                }
+            } );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+        return res;
+    }
+
+    public String films10ByFilmCountry(String mov) {
+        String res = "";
+        try ( Session session = driver.session() ) {
+            res = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    Result result = tx.run( "MATCH (m1: Movie {name: '"+mov+"'})-[]->(c1: Country), \n" +
+                                    "(m2: Movie)-[]->(c2: Country)\n" +
+                                    "WHERE m1.cluster = m2.cluster AND c1.name = c2.name\n" +
+                                    "RETURN m2.name ORDER BY m2.rate DESC LIMIT 10",
+                            parameters() );
+                    List<Record> res = result.list();
+                    String res0 = "";
+                    for( Record record: res) {
+                        List<Pair<String, Value>> rec = record.fields(); //get record's fields
+                        for (Pair<String, Value> recPair: rec) {
+                            res0 += recPair.value().asString() + "\n";
+                        }
+                    }
+                    return res0;
+                }
+            } );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+        return res;
+    }
 }

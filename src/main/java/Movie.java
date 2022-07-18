@@ -1,9 +1,4 @@
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-import java.io.IOException;
 
 
 public class Movie {
@@ -24,7 +19,84 @@ public class Movie {
     public String getRate() {
         try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
-            String rate = connector.recalculateRating(this.name, false, false, true, false);
+            String rate = connector.recalculateRating(this.name,  false, true, false, false, false);
+            //Double drate = Double.valueOf(rate);
+            //this.rate = String.format("%.3f", drate);
+            //setRate(this.rate);
+            this.rate = rate;
+        }
+        catch (Exception ex) {
+            System.out.println(ex);
+        }
+
+        return rate;
+    }
+
+    public String getCountry() {
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        {
+            String rate = connector.getСountry(this.name);
+            //Double drate = Double.valueOf(rate);
+            //this.rate = String.format("%.3f", drate);
+            //setRate(this.rate);
+            this.rate = rate;
+        }
+        catch (Exception ex) {
+            System.out.println(ex);
+        }
+
+        return rate;
+    }
+
+    public String getDirector() {
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        {
+            String rate = connector.getDirector(this.name);
+            //Double drate = Double.valueOf(rate);
+            //this.rate = String.format("%.3f", drate);
+            //setRate(this.rate);
+            this.rate = rate;
+        }
+        catch (Exception ex) {
+            System.out.println(ex);
+        }
+
+        return rate;
+    }
+    public String getWriter() {
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        {
+            String rate = connector.getWriter(this.name);
+            //Double drate = Double.valueOf(rate);
+            //this.rate = String.format("%.3f", drate);
+            //setRate(this.rate);
+            this.rate = rate;
+        }
+        catch (Exception ex) {
+            System.out.println(ex);
+        }
+
+        return rate;
+    }
+    public String getComposer() {
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        {
+            String rate = connector.getComposer(this.name);
+            //Double drate = Double.valueOf(rate);
+            //this.rate = String.format("%.3f", drate);
+            //setRate(this.rate);
+            this.rate = rate;
+        }
+        catch (Exception ex) {
+            System.out.println(ex);
+        }
+
+        return rate;
+    }
+    public String getYear() {
+        try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+        {
+            String rate = connector.getYear(this.name);
             //Double drate = Double.valueOf(rate);
             //this.rate = String.format("%.3f", drate);
             //setRate(this.rate);
@@ -64,13 +136,13 @@ public class Movie {
     }
 
     //Установка режиссера
-    public void DirectedBy(Person person, boolean orNot) {
+    public void DirectedBy(People person, boolean orNot) {
         try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
             if (orNot)
-                connector.CreateRelation( this, person, "directedBy" );
+                connector.CreateRelation( this, person, "DIRECTED_BY" );
             else
-                connector.DeleteRelation( this, person, "directedBy" );
+                connector.DeleteRelation( this, person, "DIRECTED_BY" );
         }
         catch (Exception ex) {
             System.out.println(ex);
@@ -82,9 +154,9 @@ public class Movie {
         try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
             if (orNot)
-                connector.CreateRelation( this, genre, "isGenre" );
+                connector.CreateRelation( this, genre, "IS_GENRE" );
             else
-                connector.DeleteRelation( this, genre, "isGenre" );
+                connector.DeleteRelation( this, genre, "IS_GENRE" );
         }
         catch (Exception ex) {
             System.out.println(ex);
@@ -108,7 +180,7 @@ public class Movie {
     public void findDirector() {
         try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
-            connector.FindNode(this, "directedBy", false, false);
+            connector.FindNode(this, "DIRECTED_BY", false, false);
         }
         catch (Exception ex) {
             System.out.println(ex);
@@ -148,7 +220,7 @@ public class Movie {
     public void findGenre() {
         try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
-            connector.FindNode(this, "isGenre", false, true);
+            connector.FindNode(this, "IS_GENRE", false, true);
         }
         catch (Exception ex) {
             System.out.println(ex);
