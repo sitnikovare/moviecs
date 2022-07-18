@@ -1,3 +1,14 @@
+import org.neo4j.driver.Record;
+import org.neo4j.driver.Result;
+import org.neo4j.driver.Session;
+
+import java.util.List;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 public class Database {
 
     //TODO: добавить сюда country & city
@@ -59,51 +70,51 @@ public class Database {
     Genre gen9 = new Genre("Боевик");
     Genre gen10 = new Genre("Нуар");
 
-    Date dt1994 = new Date("1994");
-    Date dt1985 = new Date("1985");
-    Date dt1975 = new Date("1975");
-    Date dt1993 = new Date("1993");
-    Date dt2013 = new Date("2013");
-    Date dt2001 = new Date("2001");
-    Date dt2011 = new Date("2011");
-    Date dt1976 = new Date("1976");
-    Date dt1999 = new Date("1999");
-    Date dt2003 = new Date("2003");
-    Date dt1997 = new Date("1997");
-    Date dt1948 = new Date("1948");
-    Date dt1950 = new Date("1950");
-    Date dt1940 = new Date("1940");
-    Date dt1969 = new Date("1969");
-    Date dt1961 = new Date("1961");
-    Date dt1965 = new Date("1965");
-    Date dt1967 = new Date("1967");
-    Date dt1938 = new Date("1938");
-    Date dt1964 = new Date("1964");
-    Date dt1970 = new Date("1970");
-    Date dt1981 = new Date("1981");
-    Date dt1971 = new Date("1971");
-    Date dt1955 = new Date("1955");
-    Date dt1959 = new Date("1959");
-    Date dt1951 = new Date("1951");
-    Date dt1963 = new Date("1963");
-    Date dt1954 = new Date("1954");
-    Date dt1946 = new Date("1946");
-    Date dt1939 = new Date("1939");
-    Date dt1942 = new Date("1942");
-    Date dt1972 = new Date("1972");
-    Date dt1968 = new Date("1968");
-    Date dt1944 = new Date("1944");
-    Date dt1953 = new Date("1953");
+//    Date dt1994 = new Date("1994");
+//    Date dt1985 = new Date("1985");
+//    Date dt1975 = new Date("1975");
+//    Date dt1993 = new Date("1993");
+//    Date dt2013 = new Date("2013");
+//    Date dt2001 = new Date("2001");
+//    Date dt2011 = new Date("2011");
+//    Date dt1976 = new Date("1976");
+//    Date dt1999 = new Date("1999");
+//    Date dt2003 = new Date("2003");
+//    Date dt1997 = new Date("1997");
+//    Date dt1948 = new Date("1948");
+//    Date dt1950 = new Date("1950");
+//    Date dt1940 = new Date("1940");
+//    Date dt1969 = new Date("1969");
+//    Date dt1961 = new Date("1961");
+//    Date dt1965 = new Date("1965");
+//    Date dt1967 = new Date("1967");
+//    Date dt1938 = new Date("1938");
+//    Date dt1964 = new Date("1964");
+//    Date dt1970 = new Date("1970");
+//    Date dt1981 = new Date("1981");
+//    Date dt1971 = new Date("1971");
+//    Date dt1955 = new Date("1955");
+//    Date dt1959 = new Date("1959");
+//    Date dt1951 = new Date("1951");
+//    Date dt1963 = new Date("1963");
+//    Date dt1954 = new Date("1954");
+//    Date dt1946 = new Date("1946");
+//    Date dt1939 = new Date("1939");
+//    Date dt1942 = new Date("1942");
+//    Date dt1972 = new Date("1972");
+//    Date dt1968 = new Date("1968");
+//    Date dt1944 = new Date("1944");
+//    Date dt1953 = new Date("1953");
 
     public Database() {};
 
     public void initDatabase() {
-        initNodes();
+//        initNodes();
         createRel_directedBy();
         createRel_isGenre();
         createRel_PlaysIn();
-        createRel_bornIn();
-        createRel_releasedIn();
+//        createRel_bornIn();
+//        createRel_releasedIn();
     }
 
     public void createUsersRel() {
@@ -125,31 +136,31 @@ public class Database {
         tS.likes(mov7, true);
         tS.likes(mov8, true);
 
-        tS.likes(act1, true);
-        tS.likes(act2, true);
-        tS.likes(act3, true);
-        tS.likes(act4, true);
-        tS.likes(act5, true);
-        tS.likes(act6, true);
-        tS.likes(act7, true);
-        tS.likes(act8, true);
-        tS.likes(act9, true);
-        tS.likes(act10, true);
-
-        tS.likes(dir3, true);
-        tS.likes(dir8, true);
-        tS.likes(dir5, true);
-        tS.likes(dir1, true);
-        tS.likes(dir9, true);
-        tS.likes(dir10, true);
-        tS.likes(dir12, true);
-        tS.likes(dir7, true);
-        tS.likes(dir15, true);
-
-        tS.likes(gen5, true);
-        tS.likes(gen1, true);
-        tS.likes(gen6, true);
-        tS.likes(gen7, true);
+//        tS.likes(act1, true);
+//        tS.likes(act2, true);
+//        tS.likes(act3, true);
+//        tS.likes(act4, true);
+//        tS.likes(act5, true);
+//        tS.likes(act6, true);
+//        tS.likes(act7, true);
+//        tS.likes(act8, true);
+//        tS.likes(act9, true);
+//        tS.likes(act10, true);
+//
+//        tS.likes(dir3, true);
+//        tS.likes(dir8, true);
+//        tS.likes(dir5, true);
+//        tS.likes(dir1, true);
+//        tS.likes(dir9, true);
+//        tS.likes(dir10, true);
+//        tS.likes(dir12, true);
+//        tS.likes(dir7, true);
+//        tS.likes(dir15, true);
+//
+//        tS.likes(gen5, true);
+//        tS.likes(gen1, true);
+//        tS.likes(gen6, true);
+//        tS.likes(gen7, true);
 
         tM.likes(mov1, true);
         tM.likes(mov10, true);
@@ -236,41 +247,41 @@ public class Database {
         gen9.initInDB();
         gen10.initInDB();
 
-        dt1994.initInDB();
-        dt1985.initInDB();
-        dt1975.initInDB();
-        dt1993.initInDB();
-        dt2013.initInDB();
-        dt2001.initInDB();
-        dt2011.initInDB();
-        dt1976.initInDB();
-        dt1999.initInDB();
-        dt2003.initInDB();
-        dt1997.initInDB();
-        dt1948.initInDB();
-        dt1950.initInDB();
-        dt1940.initInDB();
-        dt1969.initInDB();
-        dt1961.initInDB();
-        dt1965.initInDB();
-        dt1967.initInDB();
-        dt1938.initInDB();
-        dt1964.initInDB();
-        dt1970.initInDB();
-        dt1981.initInDB();
-        dt1971.initInDB();
-        dt1955.initInDB();
-        dt1959.initInDB();
-        dt1951.initInDB();
-        dt1963.initInDB();
-        dt1954.initInDB();
-        dt1946.initInDB();
-        dt1939.initInDB();
-        dt1942.initInDB();
-        dt1972.initInDB();
-        dt1968.initInDB();
-        dt1944.initInDB();
-        dt1953.initInDB();
+//        dt1994.initInDB();
+//        dt1985.initInDB();
+//        dt1975.initInDB();
+//        dt1993.initInDB();
+//        dt2013.initInDB();
+//        dt2001.initInDB();
+//        dt2011.initInDB();
+//        dt1976.initInDB();
+//        dt1999.initInDB();
+//        dt2003.initInDB();
+//        dt1997.initInDB();
+//        dt1948.initInDB();
+//        dt1950.initInDB();
+//        dt1940.initInDB();
+//        dt1969.initInDB();
+//        dt1961.initInDB();
+//        dt1965.initInDB();
+//        dt1967.initInDB();
+//        dt1938.initInDB();
+//        dt1964.initInDB();
+//        dt1970.initInDB();
+//        dt1981.initInDB();
+//        dt1971.initInDB();
+//        dt1955.initInDB();
+//        dt1959.initInDB();
+//        dt1951.initInDB();
+//        dt1963.initInDB();
+//        dt1954.initInDB();
+//        dt1946.initInDB();
+//        dt1939.initInDB();
+//        dt1942.initInDB();
+//        dt1972.initInDB();
+//        dt1968.initInDB();
+//        dt1944.initInDB();
+//        dt1953.initInDB();
     }
 
     public void createRel_PlaysIn() {
@@ -330,119 +341,119 @@ public class Database {
         mov12.isGenre(gen6, true);
     }
 
-    public void createRel_bornIn() {
-        act1.bornIn(dt1948);
-        act2.bornIn(dt1950);
-        act3.bornIn(dt1940);
-        act4.bornIn(dt1969);
-        act5.bornIn(dt1950);
-        act6.bornIn(dt1961);
-        act7.bornIn(dt1965);
-        act8.bornIn(dt1967);
-        act9.bornIn(dt1938);
-        act10.bornIn(dt1961);
-        act11.bornIn(dt1964);
-        act12.bornIn(dt1970);
-        act13.bornIn(dt1981);
-        act14.bornIn(dt1971);
-        act15.bornIn(dt1955);
+//    public void createRel_bornIn() {
+//        act1.bornIn(dt1948);
+//        act2.bornIn(dt1950);
+//        act3.bornIn(dt1940);
+//        act4.bornIn(dt1969);
+//        act5.bornIn(dt1950);
+//        act6.bornIn(dt1961);
+//        act7.bornIn(dt1965);
+//        act8.bornIn(dt1967);
+//        act9.bornIn(dt1938);
+//        act10.bornIn(dt1961);
+//        act11.bornIn(dt1964);
+//        act12.bornIn(dt1970);
+//        act13.bornIn(dt1981);
+//        act14.bornIn(dt1971);
+//        act15.bornIn(dt1955);
+//
+//        dir1.bornIn(dt1959);
+//        dir2.bornIn(dt1965);
+//        dir2.bornIn(dt1967);
+//        dir3.bornIn(dt1951);
+//        dir4.bornIn(dt1963);
+//        dir5.bornIn(dt1954);
+//        dir6.bornIn(dt1946);
+//        dir7.bornIn(dt1968);
+//        dir8.bornIn(dt1970);
+//        dir9.bornIn(dt1944);
+//        dir10.bornIn(dt1953);
+//        dir11.bornIn(dt1946);
+//        dir12.bornIn(dt1939);
+//        dir13.bornIn(dt1942);
+//        dir14.bornIn(dt1961);
+//    }
+//
+//    public void createRel_releasedIn() {
+//        mov1.releasedIn(dt1994, true);
+//        mov2.releasedIn(dt1985, true);
+//        mov3.releasedIn(dt1972, true);
+//        mov4.releasedIn(dt2013, true);
+//        mov5.releasedIn(dt1993, true);
+//        mov6.releasedIn(dt2001, true);
+//        mov7.releasedIn(dt2011, true);
+//        mov8.releasedIn(dt1976, true);
+//        mov9.releasedIn(dt1999, true);
+//        mov10.releasedIn(dt1994, true);
+//        mov11.releasedIn(dt2001, true);
+//        mov12.releasedIn(dt2003, true);
+//        mov13.releasedIn(dt1997, true);
+//    }
 
-        dir1.bornIn(dt1959);
-        dir2.bornIn(dt1965);
-        dir2.bornIn(dt1967);
-        dir3.bornIn(dt1951);
-        dir4.bornIn(dt1963);
-        dir5.bornIn(dt1954);
-        dir6.bornIn(dt1946);
-        dir7.bornIn(dt1968);
-        dir8.bornIn(dt1970);
-        dir9.bornIn(dt1944);
-        dir10.bornIn(dt1953);
-        dir11.bornIn(dt1946);
-        dir12.bornIn(dt1939);
-        dir13.bornIn(dt1942);
-        dir14.bornIn(dt1961);
-    }
-
-    public void createRel_releasedIn() {
-        mov1.releasedIn(dt1994, true);
-        mov2.releasedIn(dt1985, true);
-        mov3.releasedIn(dt1972, true);
-        mov4.releasedIn(dt2013, true);
-        mov5.releasedIn(dt1993, true);
-        mov6.releasedIn(dt2001, true);
-        mov7.releasedIn(dt2011, true);
-        mov8.releasedIn(dt1976, true);
-        mov9.releasedIn(dt1999, true);
-        mov10.releasedIn(dt1994, true);
-        mov11.releasedIn(dt2001, true);
-        mov12.releasedIn(dt2003, true);
-        mov13.releasedIn(dt1997, true);
-    }
 
 
-
-    public void updateRate() {
-    try (Connector connector = new Connector("bolt://localhost:7687", "neo4j", "root")) {
-        connector.recalculateRating(mov1.getName(), false, false, true, false);
-        connector.recalculateRating(mov2.getName(), false, false, true, false);
-        connector.recalculateRating(mov3.getName(), false, false, true, false);
-        connector.recalculateRating(mov4.getName(), false, false, true, false);
-        connector.recalculateRating(mov5.getName(), false, false, true, false);
-        connector.recalculateRating(mov6.getName(), false, false, true, false);
-        connector.recalculateRating(mov7.getName(), false, false, true, false);
-        connector.recalculateRating(mov8.getName(), false, false, true, false);
-        connector.recalculateRating(mov9.getName(), false, false, true, false);
-        connector.recalculateRating(mov10.getName(), false, false, true, false);
-        connector.recalculateRating(mov11.getName(), false, false, true, false);
-        connector.recalculateRating(mov12.getName(), false, false, true, false);
-
-        connector.recalculateRating(act1.getName(), true, false, false, false);
-        connector.recalculateRating(act2.getName(), true, false, false, false);
-        connector.recalculateRating(act3.getName(), true, false, false, false);
-        connector.recalculateRating(act4.getName(), true, false, false, false);
-        connector.recalculateRating(act5.getName(), true, false, false, false);
-        connector.recalculateRating(act6.getName(), true, false, false, false);
-        connector.recalculateRating(act7.getName(), true, false, false, false);
-        connector.recalculateRating(act8.getName(), true, false, false, false);
-        connector.recalculateRating(act9.getName(), true, false, false, false);
-        connector.recalculateRating(act10.getName(), true, false, false, false);
-        connector.recalculateRating(act11.getName(), true, false, false, false);
-        connector.recalculateRating(act12.getName(), true, false, false, false);
-        connector.recalculateRating(act13.getName(), true, false, false, false);
-        connector.recalculateRating(act14.getName(), true, false, false, false);
-        connector.recalculateRating(act15.getName(), true, false, false, false);
-
-        connector.recalculateRating(dir1.getName(), false, true, false, false);
-        connector.recalculateRating(dir2.getName(), false, true, false, false);
-        connector.recalculateRating(dir3.getName(), false, true, false, false);
-        connector.recalculateRating(dir4.getName(), false, true, false, false);
-        connector.recalculateRating(dir5.getName(), false, true, false, false);
-        connector.recalculateRating(dir6.getName(), false, true, false, false);
-        connector.recalculateRating(dir7.getName(), false, true, false, false);
-        connector.recalculateRating(dir8.getName(), false, true, false, false);
-        connector.recalculateRating(dir9.getName(), false, true, false, false);
-        connector.recalculateRating(dir10.getName(), false, true, false, false);
-        connector.recalculateRating(dir11.getName(), false, true, false, false);
-        connector.recalculateRating(dir12.getName(), false, true, false, false);
-        connector.recalculateRating(dir13.getName(), false, true, false, false);
-        connector.recalculateRating(dir14.getName(), false, true, false, false);
-        connector.recalculateRating(dir15.getName(), false, true, false, false);
-
-        connector.recalculateRating(gen1.getName(), false, false, false, true);
-        connector.recalculateRating(gen2.getName(), false, false, false, true);
-        connector.recalculateRating(gen3.getName(), false, false, false, true);
-        connector.recalculateRating(gen4.getName(), false, false, false, true);
-        connector.recalculateRating(gen5.getName(), false, false, false, true);
-        connector.recalculateRating(gen6.getName(), false, false, false, true);
-        connector.recalculateRating(gen7.getName(), false, false, false, true);
-        connector.recalculateRating(gen8.getName(), false, false, false, true);
-        connector.recalculateRating(gen9.getName(), false, false, false, true);
-        connector.recalculateRating(gen10.getName(), false, false, false, true);
-    } catch (Exception ex) {
-        System.out.println(ex);
-    }
-}
+//    public void updateRate() {
+//    try (Connector connector = new Connector("bolt://localhost:7687", "neo4j", "root")) {
+//        connector.recalculateRating(mov1.getName(), false, true, false, false);
+//        connector.recalculateRating(mov2.getName(), false,true, false, false);
+//        connector.recalculateRating(mov3.getName(), false,true, false, false);
+//        connector.recalculateRating(mov4.getName(), false,true, false, false);
+//        connector.recalculateRating(mov5.getName(), false,true, false, false);
+//        connector.recalculateRating(mov6.getName(), false, true, false, false);
+//        connector.recalculateRating(mov7.getName(), false,true, false, false);
+//        connector.recalculateRating(mov8.getName(), false,true, false, false);
+//        connector.recalculateRating(mov9.getName(), false, true, false, false);
+//        connector.recalculateRating(mov10.getName(), false,true, false, false);
+//        connector.recalculateRating(mov11.getName(), false, true, false, false);
+//        connector.recalculateRating(mov12.getName(), false, true, false, false);
+//
+//        connector.recalculateRating(act1.getName(), true,  false, false, false);
+//        connector.recalculateRating(act2.getName(), true,  false, false, false);
+//        connector.recalculateRating(act3.getName(), true,  false, false, false);
+//        connector.recalculateRating(act4.getName(), true,  false, false, false);
+//        connector.recalculateRating(act5.getName(), true,  false, false, false);
+//        connector.recalculateRating(act6.getName(), true, false, false, false);
+//        connector.recalculateRating(act7.getName(), true,  false, false, false);
+//        connector.recalculateRating(act8.getName(), true,  false, false, false);
+//        connector.recalculateRating(act9.getName(), true,  false, false, false);
+//        connector.recalculateRating(act10.getName(), true,  false, false, false);
+//        connector.recalculateRating(act11.getName(), true,  false, false, false);
+//        connector.recalculateRating(act12.getName(), true,  false, false, false);
+//        connector.recalculateRating(act13.getName(), true,  false, false, false);
+//        connector.recalculateRating(act14.getName(), true,  false, false, false);
+//        connector.recalculateRating(act15.getName(), true,  false, false, false);
+//
+//        connector.recalculateRating(dir1.getName(), true, false, false, false);
+//        connector.recalculateRating(dir2.getName(),  true, false, false, false);
+//        connector.recalculateRating(dir3.getName(),  true, false, false, false);
+//        connector.recalculateRating(dir4.getName(),  true, false, false, false);
+//        connector.recalculateRating(dir5.getName(),  true, false, false, false);
+//        connector.recalculateRating(dir6.getName(),  true, false, false, false);
+//        connector.recalculateRating(dir7.getName(),  true, false, false, false);
+//        connector.recalculateRating(dir8.getName(),  true, false, false, false);
+//        connector.recalculateRating(dir9.getName(),  true, false, false, false);
+//        connector.recalculateRating(dir10.getName(),  true, false, false, false);
+//        connector.recalculateRating(dir11.getName(),  true, false, false, false);
+//        connector.recalculateRating(dir12.getName(),  true, false, false, false);
+//        connector.recalculateRating(dir13.getName(),  true, false, false, false);
+//        connector.recalculateRating(dir14.getName(),  true, false, false, false);
+//        connector.recalculateRating(dir15.getName(),  true, false, false, false);
+//
+//        connector.recalculateRating(gen1.getName(), false,  false, true, false);
+//        connector.recalculateRating(gen2.getName(), false,  false, true, false);
+//        connector.recalculateRating(gen3.getName(), false,  false, true, false);
+//        connector.recalculateRating(gen4.getName(), false,  false, true, false);
+//        connector.recalculateRating(gen5.getName(), false,  false, true, false);
+//        connector.recalculateRating(gen6.getName(), false,  false, true, false);
+//        connector.recalculateRating(gen7.getName(), false,  false, true, false);
+//        connector.recalculateRating(gen8.getName(), false,  false, true, false);
+//        connector.recalculateRating(gen9.getName(), false,  false, true, false);
+//        connector.recalculateRating(gen10.getName(), false,  false, true, false);
+//    } catch (Exception ex) {
+//        System.out.println(ex);
+//    }
+//}
 
 public String getTop(String knd) {
         String res = new String();
@@ -478,6 +489,37 @@ public String getTop(String knd) {
             System.out.println(ex);
         }
         return res;
+    }
+
+    public void readFromFile(String fileName) {
+
+        try {
+            File file = new File(fileName);
+            //создаем объект FileReader для объекта File
+            FileReader fr = new FileReader(file);
+            //создаем BufferedReader с существующего FileReader для построчного считывания
+            BufferedReader reader = new BufferedReader(fr);
+            // считаем сначала первую строку
+            String line = reader.readLine();
+            int counter = 0;
+            while (line != null && counter < 7000) {
+                String query = "";
+                try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
+                {
+                    connector.runQueryByString(line);
+                }
+                catch (Exception ex) {
+                    System.out.println(ex);
+                }
+
+                line = reader.readLine();
+                counter += 1;
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 

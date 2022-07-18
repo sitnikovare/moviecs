@@ -15,7 +15,7 @@ public class Genre {
     public String getRate() {
         try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
-            String rate = connector.recalculateRating(this.name, false, false, false, true);
+            String rate = connector.recalculateRating(this.name, false, false,  true, false, false);
 //            Double drate = Double.valueOf(rate);
 //            rate = String.format("%.3f", drate);
 //            setRate(rate);

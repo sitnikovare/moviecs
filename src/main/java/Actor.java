@@ -1,4 +1,4 @@
-public class Actor extends Person{
+public class Actor extends People {
 
     public Actor(String n) {
         name = n;
@@ -9,7 +9,7 @@ public class Actor extends Person{
     public String getRate() {
         try ( Connector connector = new Connector( "bolt://localhost:7687", "neo4j", "root" ) )
         {
-            String rate = connector.recalculateRating(this.name, true, false, false, false);
+            String rate = connector.recalculateRating(this.name, true, false, false, false, false);
 //            Double drate = Double.valueOf(rate);
 //            rate = String.format("%.3f", drate);
 //            setRate(rate);

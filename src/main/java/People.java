@@ -1,11 +1,11 @@
-public class Person {
+public class People {
     protected String name;
     protected String role;
     protected String rate;
 
-    public Person() {}
+    public People() {}
 
-    public Person(String n, String r,String g) {
+    public People(String n, String r, String g) {
         name = n;
         role = r;
         rate = g;

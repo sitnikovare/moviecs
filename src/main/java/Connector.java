@@ -10,6 +10,7 @@ import org.neo4j.driver.AuthTokens;
         import org.neo4j.driver.Session;
         import org.neo4j.driver.Transaction;
         import org.neo4j.driver.TransactionWork;
+import org.neo4j.driver.util.Pair;
 
 import java.util.List;
 
@@ -49,15 +50,15 @@ public class Connector implements AutoCloseable {
         }
     }
 
-    //Создание узла от класса Person в БД
-    public void CreateNode(Person person) {
+    //Создание узла от класса People в БД
+    public void CreateNode(People people) {
         try ( Session session = driver.session() ) {
             String createPNode = session.writeTransaction( new TransactionWork<String>() {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    String role = person.getRole();
-                    String name = person.getName();
+                    String role = people.getRole();
+                    String name = people.getName();
 
                     Result result = tx.run( "CREATE (a:" + role +
                                     "{name: $name, rate: '0'}) " +
@@ -140,10 +141,10 @@ public class Connector implements AutoCloseable {
     }
 
 
-    //Создание связи Person->Movie в БД
-    public void CreateRelation(Person person, Movie movie, final String relation) {
-        String prole = person.getRole();
-        String pname = person.getName();
+    //Создание связи People->Movie в БД
+    public void CreateRelation(People people, Movie movie, final String relation) {
+        String prole = people.getRole();
+        String pname = people.getName();
         String mname = movie.getName();
 
         //MATCH (n:User {name: '996676572'}),(m:Actor {name: 'Киану Ривз'}) MERGE (n)-[r:likes]->(m)
@@ -154,11 +155,10 @@ public class Connector implements AutoCloseable {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    Result result = tx.run( "MATCH (n:"+prole+" {name: '"
-                                    +pname+"'}),(m:Movie {name: '"+mname+"'}) MERGE (n)-[r:"+relation+"]->(m) RETURN type(r)",
-                            parameters( "pname", pname, "mname", mname,
-                                    "relation", relation ) );
-                    return result.single().get( 0 ).asString();
+                    Result result = tx.run( "MATCH (n:User {name: '"+pname+"'}),"+
+                                    "(m:Movie {name: '"+mname+"'}) MERGE (n)-[r:LIKES]->(m)",
+                            parameters() );
+                    return "";
                 }
             } );
             System.out.println( createPM );
@@ -166,17 +166,18 @@ public class Connector implements AutoCloseable {
         catch(Exception ex) {
             System.out.println(ex);
         }
+//        recalculateRating(mname, false, true, false, true);
     }
 
-    //Создание связи Movie->Person в БД
-    public void CreateRelation( Movie movie, Person person, final String relation) {
+    //Создание связи Movie->People в БД
+    public void CreateRelation( Movie movie, People people, final String relation) {
         try ( Session session = driver.session() ) {
             String createMP = session.writeTransaction( new TransactionWork<String>() {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    String prole = person.getRole();
-                    String pname = person.getName();
+                    String prole = people.getRole();
+                    String pname = people.getName();
                     String mname = movie.getName();
 
                     Result result = tx.run( "MATCH (n:Movie {name: '"
@@ -194,8 +195,8 @@ public class Connector implements AutoCloseable {
         }
     }
 
-    //Создание связи Person->Person в БД
-    public void CreateRelation( Person per1, Person per2, final String relation) {
+    //Создание связи People->People в БД
+    public void CreateRelation( People per1, People per2, final String relation) {
         try ( Session session = driver.session() ) {
             String createPP = session.writeTransaction( new TransactionWork<String>() {
                 @Override
@@ -222,15 +223,15 @@ public class Connector implements AutoCloseable {
         }
     }
 
-    //Создание связи Person->Genre в БД
-    public void CreateRelation( Person person, Genre genre, final String relation) {
+    //Создание связи People->Genre в БД
+    public void CreateRelation( People people, Genre genre, final String relation) {
         try ( Session session = driver.session() ) {
             String createPG = session.writeTransaction( new TransactionWork<String>() {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    String pname = person.getName();
-                    String prole = person.getRole();
+                    String pname = people.getName();
+                    String prole = people.getRole();
                     String gname = genre.getName();
 
                     Result result = tx.run( "MATCH (n:"+prole+" {name: '"
@@ -298,10 +299,10 @@ public class Connector implements AutoCloseable {
         }
     }
 
-    //Person->Date
-    public void CreateRelation(Person person, Date date, final String relation) {
-        String prole = person.getRole();
-        String pname = person.getName();
+    //People->Date
+    public void CreateRelation(People people, Date date, final String relation) {
+        String prole = people.getRole();
+        String pname = people.getName();
         String dyear = date.getYear();
 
         try ( Session session = driver.session() ) {
@@ -323,15 +324,15 @@ public class Connector implements AutoCloseable {
         }
     }
 
-    //удаление узла Person в БД
-    public void DeleteNode( Person person ) {
+    //удаление узла People в БД
+    public void DeleteNode( People people ) {
         try ( Session session = driver.session() ) {
             String greeting = session.writeTransaction( new TransactionWork<String>() {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    String prole = person.getRole();
-                    String pname = person.getName();
+                    String prole = people.getRole();
+                    String pname = people.getName();
                     Result result = tx.run( "MATCH (n: " + prole + " {name: '" + pname + "'})" +
                             " DELETE n RETURN n.name",
                             parameters( "prole", prole, "pname", pname ) );
@@ -408,21 +409,20 @@ public class Connector implements AutoCloseable {
         }
     }
 
-    //удаление связи от узлов Person к Movie в БД
-    public void DeleteRelation( Person person, Movie movie, final String relation ) {
+    //удаление связи от узлов People к Movie в БД
+    public void DeleteRelation( People people, Movie movie, final String relation ) {
         try ( Session session = driver.session() ) {
             String greeting = session.writeTransaction( new TransactionWork<String>() {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    String pname = person.getName();
+                    String pname = people.getName();
                     String mname = movie.getName();
 
-                    Result result = tx.run( "MATCH (n {name: '"+
-                                    pname + "'})-[r: " + relation + "]->(b {name: '" + mname +
-                                    "'}) DELETE r RETURN n.name",
-                            parameters( "pname", pname, "mname", mname, "relation", relation ) );
-                    return result.single().get( 0 ).asString();
+                    Result result = tx.run( "MATCH (n:User {name: '"+pname+"'})-[r]->"
+                                    +"(m:Movie {name: '"+mname+"'}) DELETE r",
+                            parameters(  ) );
+                    return "";
                 }
             } );
             System.out.println( greeting );
@@ -432,14 +432,14 @@ public class Connector implements AutoCloseable {
         }
     }
 
-    //удаление связи от узлов Person к Genre в БД
-    public void DeleteRelation( Person person, Genre genre, final String relation ) {
+    //удаление связи от узлов People к Genre в БД
+    public void DeleteRelation( People people, Genre genre, final String relation ) {
         try ( Session session = driver.session() ) {
             String greeting = session.writeTransaction( new TransactionWork<String>() {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    String pname = person.getName();
+                    String pname = people.getName();
                     String gname = genre.getName();
 
                     Result result = tx.run( "MATCH (n {name: '"+
@@ -456,15 +456,15 @@ public class Connector implements AutoCloseable {
         }
     }
 
-    //удаление связи от узлов Person->Person в БД
-    public void DeleteRelation( Person person1, Person person2, final String relation ) {
+    //удаление связи от узлов People->People в БД
+    public void DeleteRelation( People people1, People people2, final String relation ) {
         try ( Session session = driver.session() ) {
             String greeting = session.writeTransaction( new TransactionWork<String>() {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    String p1name = person1.getName();
-                    String p2name = person2.getName();
+                    String p1name = people1.getName();
+                    String p2name = people2.getName();
 
                     Result result = tx.run( "MATCH (n {name: '" + p1name + "'})-[r:"
                                     + relation + "]->(b {name: '" + p2name + "' }) DELETE r RETURN n.name",
@@ -502,15 +502,15 @@ public class Connector implements AutoCloseable {
         }
     }
 
-    //удаление связи от узлов Movie->Person в БД
-    public void DeleteRelation( Movie movie, Person person, final String relation ) {
+    //удаление связи от узлов Movie->People в БД
+    public void DeleteRelation( Movie movie, People people, final String relation ) {
         try ( Session session = driver.session() ) {
             String greeting = session.writeTransaction( new TransactionWork<String>() {
                 @Override
                 public String execute( Transaction tx )
                 {
                     String mname = movie.getName();
-                    String pname = person.getName();
+                    String pname = people.getName();
 
                     Result result = tx.run( "MATCH (n {name: '"+
                                     mname + "'})-[r:" + relation + "]->(b {name: $pname}) DELETE r RETURN n.name",
@@ -601,16 +601,16 @@ public class Connector implements AutoCloseable {
         }
     }
 
-    //Найти узлы от узла Person
-    public String FindNode( Person person, final String rel, boolean isDir, boolean isMovie) {
+    //Найти узлы от узла People
+    public String FindNode( People people, final String rel, boolean isDir, boolean isMovie) {
         final String[] resultStr = {"result is null"};
         try ( Session session = driver.session() ) {
             String greeting = session.writeTransaction( new TransactionWork<String>() {
                 @Override
                 public String execute( Transaction tx )
                 {
-                    String pname = person.getName();
-                    String prole = person.getRole();
+                    String pname = people.getName();
+                    String prole = people.getRole();
 
                     if (isMovie && isDir) {
                         Result result = tx.run( "MATCH (p: "+prole+" {name: $pname})"
@@ -645,7 +645,7 @@ public class Connector implements AutoCloseable {
         return resultStr[0];
     }
 
-    //Найти узлы от узла Person
+    //Найти узлы от узла People
     public void FindNode( User user, final String rel, boolean isMG) {
         try ( Session session = driver.session() ) {
             String greeting = session.writeTransaction( new TransactionWork<String>() {
@@ -700,7 +700,7 @@ public class Connector implements AutoCloseable {
                     }
                     else {
                         Result result = tx.run( "MATCH (m:Movie {name: $mname})"
-                                        + "<-[:"+ rel +"]" + "-(person) RETURN person.name",
+                                        + "<-[:"+ rel +"]" + "-(people) RETURN people.name",
                                 parameters( "mname", mname, "rel", rel ) );
                         return result.single().get( 0 ).asString();
                     }
@@ -790,15 +790,38 @@ public class Connector implements AutoCloseable {
         }
     }
 
+    public String getRate(String role, String nodeName) {
+        String res = "";
+        try ( Session session = driver.session() ) {
+            String query = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+
+                    Result result = tx.run( "MATCH (m:"+role+" {name: '"+nodeName+"'}) RETURN m.rate",
+                            parameters("role", role, "nodeName", nodeName) );
+                    System.out.println(result);
+//                    res = result.single().get( 0 ).asString();
+                    return result.single().get( 0 ).asString();
+                }
+            } );
+            System.out.println( query );
+            res = query;
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+        return res;
+    }
+
     //Пересчет рейтинга узла
     //TODO: придумать новую формула подсчета рейтинга
-    public String recalculateRating(final String nodeName, boolean isActor, boolean isDirector,
-                                  boolean isMovie, boolean isGenre) {
+    public String recalculateRating(final String nodeName, boolean isPeople,
+                                  boolean isMovie, boolean isGenre, boolean likes, boolean unlike) {
         Integer[] numbersUserLikes = new Integer[2];
 
         String rolef = "";
-        if (isActor) rolef = "Actor";
-        else if (isDirector) rolef = "Director";
+        if (isPeople) rolef = "People";
         else if (isMovie) rolef = "Movie";
         else if (isGenre) rolef = "Genre";
         final String role = rolef;
@@ -824,13 +847,42 @@ public class Connector implements AutoCloseable {
         }
 
         Double rec = Double.valueOf(numbersUserLikes[1]) / Double.valueOf(numbersUserLikes[0]);
-        String recalc = String.format("%.2f", rec);
 
-        System.out.println(role + " " + nodeName + " " + recalc);
-        System.out.println("MATCH (m:"+role+" {name: '"+nodeName+"'}) SET m.rate = '"+recalc+"'");
+        if (likes) {
+            String oldRate = getRate(role, nodeName);
+            oldRate = oldRate.replace(',', '.');
+            Double oRate = Double.valueOf(oldRate);
+            System.out.println(oRate);
+            rec += oRate;
 
-        setRate(role, nodeName, recalc);
-        return recalc;
+            String recalc = String.format("%.2f", rec);
+
+            System.out.println(role + " " + nodeName + " " + recalc);
+            System.out.println("MATCH (m:"+role+" {name: '"+nodeName+"'}) SET m.rate = '"+recalc+"'");
+
+            setRate(role, nodeName, recalc);
+
+            return recalc;
+        }
+
+        if (unlike) {
+            String oldRate = getRate(role, nodeName);
+            oldRate = oldRate.replace(',', '.');
+            Double oRate = Double.valueOf(oldRate);
+            System.out.println(oRate);
+            rec = Double.valueOf(oldRate) - (1.0 / Double.valueOf(numbersUserLikes[0]));
+
+            String recalc = String.format("%.2f", rec);
+
+            System.out.println(role + " " + nodeName + " " + recalc);
+            System.out.println("MATCH (m:"+role+" {name: '"+nodeName+"'}) SET m.rate = '"+recalc+"'");
+
+            setRate(role, nodeName, recalc);
+
+            return recalc;
+        }
+
+        return getRate(role, nodeName);
     }
 
     public String[][] topMovies() {
@@ -983,5 +1035,205 @@ public class Connector implements AutoCloseable {
         }
 
         return result;
+    }
+
+    public void runQueryByString(String query) {
+        try ( Session session = driver.session() ) {
+            String greeting = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    Result result = tx.run( query,
+                            parameters( ) );
+                    List<Record> res = result.list();
+                    String res0 = "";
+                    for( Record record: res) {
+                        List<Pair<String, Value>> rec = record.fields(); //get record's fields
+                        for (Pair<String, Value> recPair: rec) {
+                            res0 += recPair.value().asString() + "\n";
+                        }
+                    }
+                    return res0;
+                }
+            } );
+            System.out.println( greeting );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+    }
+
+    public String getСountry(String mov) {
+        String res = "";
+        try ( Session session = driver.session() ) {
+            res = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    Result result = tx.run( "MATCH (m1: Movie {name: '"+mov+"'})-[]->(g1: Country)" +
+                                    "RETURN g1.name",
+                            parameters() );
+                    List<Record> res = result.list();
+                    String res0 = "";
+                    for( Record record: res) {
+                        List<Pair<String, Value>> rec = record.fields(); //get record's fields
+                        for (Pair<String, Value> recPair: rec) {
+                            res0 += recPair.value().asString() + "\n";
+                        }
+                    }
+                    return res0;
+                }
+            } );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+        return res;
+    }
+
+    public String getDirector(String mov) {
+        String res = "";
+        try ( Session session = driver.session() ) {
+            res = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    Result result = tx.run( "MATCH (m1: Movie {name: '"+mov+"'})-[DIRECTED_BY]->(g1: People)" +
+                                    "RETURN g1.name",
+                            parameters() );
+                    List<Record> res = result.list();
+                    String res0 = "";
+                    for( Record record: res) {
+                        List<Pair<String, Value>> rec = record.fields(); //get record's fields
+                        for (Pair<String, Value> recPair: rec) {
+                            res0 += recPair.value().asString() + "\n";
+                            break;
+                        }
+                        break;
+                    }
+                    return res0;
+                }
+            } );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+        return res;
+    }
+
+    public String getWriter(String mov) {
+        String res = "";
+        try ( Session session = driver.session() ) {
+            res = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    Result result = tx.run( "MATCH (m1: Movie {name: '"+mov+"'})-[WRITED_BY]->(g1: People)" +
+                                    "RETURN g1.name",
+                            parameters() );
+                    List<Record> res = result.list();
+                    String res0 = "";
+                    for( Record record: res) {
+                        List<Pair<String, Value>> rec = record.fields(); //get record's fields
+                        for (Pair<String, Value> recPair: rec) {
+                            res0 += recPair.value().asString() + "\n";
+                            break;
+                        }
+                        break;
+                    }
+                    return res0;
+                }
+            } );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+        return res;
+    }
+
+    public String getYear(String mov) {
+        String res = "";
+        try ( Session session = driver.session() ) {
+            res = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    Result result = tx.run( "MATCH (m1: Movie {name: '"+mov+"'})-[RELEASED_IN]->(g1: Year)" +
+                                    "RETURN g1.name",
+                            parameters() );
+                    List<Record> res = result.list();
+                    String res0 = "";
+                    for( Record record: res) {
+                        List<Pair<String, Value>> rec = record.fields(); //get record's fields
+                        for (Pair<String, Value> recPair: rec) {
+                            res0 += recPair.value().asString() + "\n";
+                        }
+                    }
+                    return res0;
+                }
+            } );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+        return res;
+    }
+
+    public String getCountry(String mov) {
+        String res = "";
+        try ( Session session = driver.session() ) {
+            res = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    Result result = tx.run( "MATCH (m1: Movie {name: '"+mov+"'})-[FROM_COUNTRY]->(g1: Country)" +
+                                    "RETURN g1.name",
+                            parameters() );
+                    List<Record> res = result.list();
+                    String res0 = "";
+                    for( Record record: res) {
+                        List<Pair<String, Value>> rec = record.fields(); //get record's fields
+                        for (Pair<String, Value> recPair: rec) {
+                            res0 += recPair.value().asString() + "\n";
+                        }
+                    }
+                    return res0;
+                }
+            } );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+        return res;
+    }
+
+    public String getComposer(String mov) {
+        String res = "";
+        try ( Session session = driver.session() ) {
+            res = session.writeTransaction( new TransactionWork<String>() {
+                @Override
+                public String execute( Transaction tx )
+                {
+                    Result result = tx.run( "MATCH (m1: Movie {name: '"+mov+"'})-[COMPOSED_BY]->(g1: People)" +
+                                    "RETURN g1.name",
+                            parameters() );
+                    List<Record> res = result.list();
+                    String res0 = "";
+                    for( Record record: res) {
+                        List<Pair<String, Value>> rec = record.fields(); //get record's fields
+                        for (Pair<String, Value> recPair: rec) {
+                            res0 += recPair.value().asString() + "\n";
+                            break;
+                        }
+                        break;
+                    }
+                    return res0;
+                }
+            } );
+        }
+        catch(Exception ex) {
+            System.out.println(ex);
+        }
+        return res;
     }
 }
